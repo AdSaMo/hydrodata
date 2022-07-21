@@ -19,8 +19,7 @@ import com.logocito.atlas.data.MasaAgua
 import com.logocito.atlas.data.MasaAguaDao
 import com.logocito.atlas.data.Tramo
 import com.logocito.atlas.data.TramoDao
-import com.logocito.atlas.data.muestras.MuestraTransversal
-import com.logocito.atlas.data.muestras.MuestrasTransversalesDao
+import com.logocito.atlas.data.muestras.*
 import com.logocito.atlas.databinding.ActivityMainBinding
 //Definimos nuestra clase principal que contará con métodos que actuarán como hooks para la lógica de la app.
 class MainActivity : AppCompatActivity() {
@@ -76,10 +75,27 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+
+fun encontrarCodigoDisponible (lista : List<String>) : String {
+    var index = 0
+    var yaEsta : Boolean
+    var codigo : String
+    do{
+        index = index + 1
+        codigo = "Nueva ${index}"
+        println(codigo)
+        yaEsta = lista.contains(codigo)
+    }
+    while (yaEsta)
+    return codigo
+}
+
 class MainActivityViewModel(application: Application) : AndroidViewModel(application){
     private  var daoMasasAgua : MasaAguaDao
     private  var daoTramos : TramoDao
     private  var daoMuestrasTransversales : MuestrasTransversalesDao
+    private var daoMuestrasLongitudinales : MuestrasLongitudinalesDao
+    private var daoMuestrasSubtramos: MuestrasSubtramosDao
     //Primera pantalla
     private val _codigosDeMasasDeAgua= MutableLiveData<ArrayList<String>>()
     val codigosDeMasasDeAgua : LiveData<ArrayList<String>> get() = _codigosDeMasasDeAgua
@@ -93,8 +109,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     //Tercera pantalla
     private val _codigoDeTramo= MutableLiveData<String>()
     val codigoDeTramo : LiveData<String> get() = _codigoDeTramo
-    private val _codigosDeMuestras= MutableLiveData<ArrayList<Pair<String,String>>>()
-    val codigosDeMuestras : LiveData<ArrayList<Pair<String,String>>> get() = _codigosDeMuestras
+    private val _codigosDeMuestrasLongitudinales= MutableLiveData<ArrayList<String>>()
+    val codigosDeMuestrasLongitudinales : LiveData<ArrayList<String>> get() = _codigosDeMuestrasLongitudinales
+    private val _codigosDeMuestrasTransversales= MutableLiveData<ArrayList<String>>()
+    val codigosDeMuestrasTransversales : LiveData<ArrayList<String>> get() = _codigosDeMuestrasTransversales
+    private val _codigosDeMuestrasSubtramos= MutableLiveData<ArrayList<String>>()
+    val codigosDeMuestrasSubtramos : LiveData<ArrayList<String>> get() = _codigosDeMuestrasSubtramos
 
     init {
         val app = this.getApplication<App>()
@@ -102,6 +122,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         this._codigosDeMasasDeAgua.postValue(this.daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String>)
         this.daoTramos = app.database.tramoDao()
         this.daoMuestrasTransversales = app.database.muestrasTransversalesDao()
+        this.daoMuestrasLongitudinales = app.database.muestrasLongitudinalesDao()
+        this.daoMuestrasSubtramos = app.database.muestrasSubtramosDao()
     }
 
     fun añadirMasaAgua (codigo: String){
@@ -112,25 +134,26 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         this.daoMasasAgua.añadirMasaAgua(nuevaMasaAgua)
         this._codigosDeMasasDeAgua.value = daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String> /* = java.util.ArrayList<kotlin.String> */
     }
+    fun añadirMasaAgua (): String{
+        val codigo = encontrarCodigoDisponible(this.codigosDeMasasDeAgua.value!!)
+        this.añadirMasaAgua(codigo)
+        return codigo
+    }
+    fun añadirTramo() : String{
+        val codigo = encontrarCodigoDisponible(this.codigosDeTramos.value!!)
+        this.añadirTramo(this.codigoDeMasaAgua.value!!,codigo)
+        return codigo
+    }
     fun añadirTramo(codigoMasaAgua : String, codigoTramo : String){
         val masaAgua = daoMasasAgua.cargar(codigoMasaAgua)
         val tramo = Tramo(0,codigoTramo,masaAgua.id)
         this.daoTramos.crearTramo(tramo)
         this._codigosDeTramos.value = daoTramos.obtenerCodigosTramos(masaAgua.id) as ArrayList<String>
     }
-    fun añadirMuestraTransversal(){
-        val muestras = this.codigosDeMuestras.value!!
-        var index = 0
-        var yaEsta : Boolean
-        var codigo : String
-        do{
-            index = index + 1
-            codigo = "Nuevo_${index}"
-            val par = Pair<String,String>(codigo,"Transversal")
-            yaEsta = muestras.contains(par)
-        }
-        while (yaEsta)
+    fun añadirMuestraTransversal() : String{
+        val codigo = encontrarCodigoDisponible(this.codigosDeMuestrasTransversales.value!!)
         this.añadirMuestraTransversal(codigo)
+        return codigo
     }
     fun añadirMuestraTransversal(codigoMuestraTransversal : String){
         val codigoTramo = this.codigoDeTramo.value!!
@@ -142,6 +165,38 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             longitud = 0,
         )
         this.daoMuestrasTransversales.crearMuestraTransversal(muestraTransversal)
+        this.cargarTramo(codigoTramo)
+    }
+    fun añadirMuestraLongitudinal() : String{
+        val codigo = encontrarCodigoDisponible(this.codigosDeMuestrasLongitudinales.value!!)
+        this.añadirMuestraLongitudinal(codigo)
+        return codigo
+    }
+    fun añadirMuestraLongitudinal(codigoMuestraLongitudinal : String){
+        val codigoTramo = this.codigoDeTramo.value!!
+        val idTramo = daoTramos.findId(codigoTramo)
+        val muestraLongitudinal = MuestraLongitudinal(
+            id=0,
+            idTramo = idTramo,
+            codigo = codigoMuestraLongitudinal,
+        )
+        this.daoMuestrasLongitudinales.añadir(muestraLongitudinal)
+        this.cargarTramo(codigoTramo)
+    }
+    fun añadirMuestraSubtramo() : String{
+        val codigo = encontrarCodigoDisponible(this.codigosDeMuestrasSubtramos.value!!)
+        this.añadirMuestraSubtramo(codigo)
+        return codigo
+    }
+    fun añadirMuestraSubtramo(codigoMuestraSubtramo : String){
+        val codigoTramo = this.codigoDeTramo.value!!
+        val idTramo = daoTramos.findId(codigoTramo)
+        val muestraSubtramo = MuestraSubtramo(
+            id=0,
+            idTramo = idTramo,
+            codigo = codigoMuestraSubtramo,
+        )
+        this.daoMuestrasSubtramos.añadir(muestraSubtramo)
         this.cargarTramo(codigoTramo)
     }
     fun cambiarCodigoMasaAgua(codigoNuevo : String){
@@ -187,12 +242,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun cargarTramo(codigo : String,){
         val idTramo = daoTramos.findId(codigo)
         this._codigoDeTramo.postValue(codigo)
-        val todosCodigosDeMuestras = ArrayList<Pair<String,String>>()
-        val codigosMuestrasTransversales = daoMuestrasTransversales.obtenerCodigosMuestrasTransversales(idTramo)
-        todosCodigosDeMuestras.addAll(codigosMuestrasTransversales.map{
-            Pair<String,String>(it,"Transversal")
-        })
-        this._codigosDeMuestras.postValue(todosCodigosDeMuestras)
+        val codigosMuestrasTransversales = daoMuestrasTransversales.obtenerCodigosMuestrasTransversales(idTramo) as ArrayList<String>
+        this._codigosDeMuestrasTransversales.postValue(codigosMuestrasTransversales)
+        val codigosMuestrasLongitudinales = daoMuestrasLongitudinales.obtenerCodigos(idTramo) as ArrayList<String>
+        this._codigosDeMuestrasLongitudinales.postValue(codigosMuestrasLongitudinales)
+        val codigosMuestrasSubtramos = daoMuestrasSubtramos.obtenerCodigos(idTramo) as ArrayList<String>
+        this._codigosDeMuestrasSubtramos.postValue(codigosMuestrasSubtramos)
     }
 }
 

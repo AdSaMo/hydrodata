@@ -62,19 +62,7 @@ class MasasAguaFragment : Fragment() {
 
 
         binding.btNuevaMasa.setOnClickListener {
-            val masasAgua = this.viewModel.codigosDeMasasDeAgua.value!!
-            var index = 0
-            var yaEsta : Boolean
-            var codigo : String
-            do{
-                index = index + 1
-                codigo = "Nueva ${index}"
-                println(codigo)
-                yaEsta = masasAgua.contains(codigo)
-            }
-            while (yaEsta)
-
-            this.viewModel.añadirMasaAgua(codigo)
+            val codigo = this.viewModel.añadirMasaAgua()
             val navController = findNavController()
             val bundle = bundleOf("masaDeAgua" to codigo)
             navController.navigate(

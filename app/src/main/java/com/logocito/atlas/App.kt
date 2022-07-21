@@ -8,7 +8,7 @@ class App : Application() {
     lateinit var database: Database
     override fun onCreate() {
         super.onCreate()
-        this.database = Room.databaseBuilder(this, Database::class.java,"atlas4").allowMainThreadQueries().build()
+        this.database = Room.databaseBuilder(this, Database::class.java,"atlas5").allowMainThreadQueries().build()
 
     }
 }

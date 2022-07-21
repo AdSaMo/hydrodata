@@ -6,7 +6,7 @@ import com.logocito.atlas.data.Muestra
 @Entity(
     tableName ="muestras_subtramos"
 )
-data class MuestraSubtramos (
+data class MuestraSubtramo (
     @PrimaryKey(autoGenerate = true)
     val id : Int,
     val codigo : String,
@@ -18,7 +18,7 @@ interface MuestrasSubtramosDao {
     fun obtenerCodigos(idTramo: Int): List<String>
 
     @Insert
-    fun añadir(muestraSubtramos: MuestraSubtramos)
+    fun añadir(muestraSubtramos: MuestraSubtramo)
 
     @Query("SELECT id FROM muestras_subtramos WHERE codigo = :codigo")
     fun findId(codigo: String): Int

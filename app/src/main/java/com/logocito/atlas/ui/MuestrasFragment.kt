@@ -35,27 +35,56 @@ class MuestrasFragment : Fragment() {
 
     }
 
+    fun recargarParteLista (codigos : List<String>, tipo : String){
+        for (codigo in codigos){
+            val fila = TableRow(this.binding.tabla.context)
+            val prueba1 = TextView(fila.context)
+            prueba1.text = codigo
+            fila.addView(prueba1)
+            val tipoView = TextView(fila.context)
+            tipoView.text = tipo
+            fila.addView(tipoView)
+            this.binding.tabla.addView(fila)
+
+        }
+    }
+    fun recargarLista () {
+        this.binding.tabla.removeAllViews()
+        if(this.viewModel.codigosDeMuestrasTransversales.value != null){
+            this.recargarParteLista(this.viewModel.codigosDeMuestrasTransversales.value!!, "Transversal")
+        }
+        if(this.viewModel.codigosDeMuestrasLongitudinales.value != null) {
+            this.recargarParteLista(
+                this.viewModel.codigosDeMuestrasLongitudinales.value!!,
+                "Longitudinal",
+            )
+        }
+        if(this.viewModel.codigosDeMuestrasSubtramos.value != null) {
+            this.recargarParteLista(this.viewModel.codigosDeMuestrasSubtramos.value!!, "Subtramo")
+        }
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.viewModel.codigoDeTramo.observe(this.viewLifecycleOwner, Observer {
             binding.editTramoCode.setText(this.viewModel.codigoDeTramo.value)
         })
-        this.viewModel.codigosDeMuestras.observe(
+        this.viewModel.codigosDeMuestrasTransversales.observe(
             this.viewLifecycleOwner,
             Observer {
-                this.binding.tabla.removeAllViews()
-                for (par in it){
-                    val codigoDeMuestra = par.first
-                    val fila = TableRow(this.binding.tabla.context)
-                    val prueba1 = TextView(fila.context)
-                    prueba1.text = codigoDeMuestra
-                    fila.addView(prueba1)
-                    val tipo = TextView(fila.context)
-                    tipo.text = par.second
-                    fila.addView(tipo)
-                    this.binding.tabla.addView(fila)
-
-                }
+                this.recargarLista()
+            },
+        )
+        this.viewModel.codigosDeMuestrasLongitudinales.observe(
+            this.viewLifecycleOwner,
+            Observer {
+                this.recargarLista()
+            },
+        )
+        this.viewModel.codigosDeMuestrasSubtramos.observe(
+            this.viewLifecycleOwner,
+            Observer {
+                this.recargarLista()
             },
         )
 
@@ -65,11 +94,11 @@ class MuestrasFragment : Fragment() {
             //findNavController().navigate(R.id.action_TramosFragment_to_MuestrasFragment)
         }
         binding.btNuevoLongitudinal.setOnClickListener {
-            //this.viewModel.añadirMuestraLongitudinal()
+            this.viewModel.añadirMuestraLongitudinal()
             //findNavController().navigate(R.id.action_TramosFragment_to_MuestrasFragment)
         }
         binding.btNuevoSubtramo.setOnClickListener {
-            //this.viewModel.añadirMuestraSubtramos()
+            this.viewModel.añadirMuestraSubtramo()
             //findNavController().navigate(R.id.action_TramosFragment_to_MuestrasFragment)
         }
         binding.editTramoCode.setOnEditorActionListener {

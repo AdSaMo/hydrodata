@@ -64,17 +64,7 @@ class TramosFragment : Fragment() {
         )
 
         binding.btNuevoTramo.setOnClickListener {
-            val tramos = this.viewModel.codigosDeTramos.value!!
-            var index = 0
-            var yaEsta : Boolean
-            var codigo : String
-            do{
-                index = index + 1
-                codigo = "Nuevo_${index}"
-                yaEsta = tramos.contains(codigo)
-            }
-            while (yaEsta)
-            this.viewModel.añadirTramo(this.viewModel.codigoDeMasaAgua.value!!,codigo)
+            this.viewModel.añadirTramo()
             //findNavController().navigate(R.id.action_TramosFragment_to_MuestrasFragment)
         }
         binding.editMasaAguaCode.setOnEditorActionListener {
