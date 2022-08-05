@@ -14,6 +14,9 @@ data class MuestraSubtramo (
 )
 @Dao
 interface MuestrasSubtramosDao {
+    @Query("SELECT id FROM muestras_subtramos WHERE idTramo = :idTramo")
+    fun obtenerIds(idTramo: Int): List<Int>
+
     @Query("SELECT codigo FROM muestras_subtramos WHERE idTramo = :idTramo")
     fun obtenerCodigos(idTramo: Int): List<String>
 
@@ -22,4 +25,7 @@ interface MuestrasSubtramosDao {
 
     @Query("SELECT id FROM muestras_subtramos WHERE codigo = :codigo")
     fun findId(codigo: String): Int
+
+    @Update
+    fun actualizar (muestraSubtramo: MuestraSubtramo)
 }

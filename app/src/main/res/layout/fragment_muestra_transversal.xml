@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MuestraTransversalFragment">
+
+    <EditText
+        android:id="@+id/codigo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/codigo">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:layout_conversion_absoluteHeight="0dp"
+            tools:layout_conversion_absoluteWidth="0dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
+            <TextView
+                android:id="@+id/tvTitulo1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Datos básicos del obstáculo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvFecha"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:id="@+id/tvHora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora"
+                app:layout_constraintBottom_toTopOf="@+id/editTextTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Coordenadas UTM ETRS89"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toTopOf="@+id/textView2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
+
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitulo1" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Y"
+                app:layout_constraintBottom_toTopOf="@+id/coordenadaY"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <EditText
+                android:id="@+id/coordenadaY"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="639dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView3"
+
+                />
+
+            <EditText
+                android:id="@+id/editTextTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvHora"
+                />
+
+            <EditText
+                android:id="@+id/coordenadaX"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textView3"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFecha" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="X"
+                app:layout_constraintBottom_toTopOf="@+id/coordenadaX"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <TextView
+                android:id="@+id/tvAcceso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/accesoGroup"
+                app:layout_constraintTop_toBottomOf="@+id/coordenadaY"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Acceso: " />
+
+            <RadioGroup
+                android:id="@+id/accesoGroup"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAcceso"
+                >
+
+                <RadioButton
+                    android:id="@+id/rbMi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MI" />
+
+                <RadioButton
+                    android:id="@+id/rbMd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="MD" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvAprovechamiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uso/Aprovechamiento"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf ="@id/accesoGroup"
+                app:layout_constraintBottom_toTopOf="@id/tablaCheck"
+                />
+
+            <TableLayout
+                android:id="@+id/tablaCheck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf ="@id/tvAprovechamiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <CheckBox
+                        android:id="@+id/checkBox2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Regadío" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Agricultura" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <CheckBox
+                        android:id="@+id/checkBox4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ganadero" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transvases hidroeléctricos" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <CheckBox
+                        android:id="@+id/checkBox6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Consumo Humano" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Desconocido" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <CheckBox
+                        android:id="@+id/checkBox8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Industrial" />
+
+                    <CheckBox
+                        android:id="@+id/checkBox7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Otros" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/tvCanalLateral"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tablaCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Existe canal lateral:" />
+
+            <RadioGroup
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCanalLateral"
+                >
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sí" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="No" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/radio3"
+                app:layout_constraintBottom_toTopOf="@id/radio4"
+                android:text="¿El azud está colmatado?" />
+            <RadioGroup
+                android:id="@+id/radio4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView4"
+                >
+
+                <RadioButton
+                    android:id="@+id/radioButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sí" />
+
+                <RadioButton
+                    android:id="@+id/radioButton5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="No" />
+            </RadioGroup>
+            <TextView
+                android:id="@+id/tvRejillas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/radio4"
+                app:layout_constraintBottom_toTopOf="@id/radioRejilla"
+                android:text="¿El canal presenta rejillas?" />
+            <RadioGroup
+                android:id="@+id/radioRejilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRejillas"
+                >
+
+                <RadioButton
+                    android:id="@+id/rbRejillaSi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sí" />
+
+                <RadioButton
+                    android:id="@+id/rbRejillaNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="No" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvTitulo2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de obstáculo y características"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/radioRejilla"
+                tools:layout_editor_absoluteY="64dp" />
+
+            <CheckBox
+                android:id="@+id/cbSaltoVertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/imgSaltoVertical"
+                android:text="Salto vertical"
+                app:layout_constraintTop_toTopOf="@id/imgSaltoVertical"
+                tools:layout_editor_absoluteY="94dp" />
+
+            <ImageView
+                android:id="@+id/imgSaltoVertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/salto_vertical"
+                app:layout_constraintStart_toEndOf="@id/cbSaltoVertical"
+                app:layout_constraintTop_toBottomOf="@id/tvTitulo2" />
+
+            <TextView
+                android:id="@+id/tvAlturaObstaculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgSaltoVertical"
+                android:text="Altura del obstáculo (H)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaObstaculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaObstaculo"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvAlturaSalto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaObstaculo"
+                android:text="Altura del salto (S)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaSalto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaSalto"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+            <TextView
+                android:id="@+id/tvProfundidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaSalto"
+                android:text="Profundidad de la poza a pie de azud (P)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etProfundidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProfundidad"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvAnchuraCoronacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etProfundidad"
+                android:text="Anchura en coronación (W)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAnchuraCoronacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnchuraCoronacion"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvLongitudCoronacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAnchuraCoronacion"
+                android:text="Longitud en coronación (L)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etLongitudcoronacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLongitudCoronacion"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+            <TextView
+                android:id="@+id/tvAlturaLamina"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLongitudcoronacion"
+                android:text="Altura de la lámina en coronación (A)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaLamina"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaLamina"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+            <CheckBox
+                android:id="@+id/cbPasoEntubado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivPasoEntubado"
+                android:text="Paso entubado"
+                app:layout_constraintTop_toTopOf="@id/ivPasoEntubado"
+                app:layout_constraintBottom_toBottomOf="@id/ivPasoEntubado"
+                tools:layout_editor_absoluteY="241dp" />
+
+            <ImageView
+                android:id="@+id/ivPasoEntubado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/paso_entubado"
+                app:layout_constraintStart_toEndOf="@id/cbPasoEntubado"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaLamina" />
+            <TextView
+                android:id="@+id/tvVelocidadCorriente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivPasoEntubado"
+                android:text="Velocidad de la corriente (V)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etVelocidadCorriente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvVelocidadCorriente"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvDiametroPaso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etVelocidadCorriente"
+                android:text="Diámetro del paso"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etDiametroPaso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDiametroPaso"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+            <TextView
+                android:id="@+id/tvAlturaPaso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etDiametroPaso"
+                android:text="Altura de la Lámina en el paso (A)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaPaso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaPaso"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvLongitudPaso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaPaso"
+                android:text="Longitud del paso (I)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etLongitudPaso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLongitudPaso"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvLongitudCoronacionPasoEntubado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLongitudPaso"
+                android:text="Longitud en coronación (L)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etLongitudCoronacionPasoEntubado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLongitudCoronacionPasoEntubado"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+
+            <CheckBox
+                android:id="@+id/cbPasoParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivPasoParamento"
+                android:text="Paso sobre paramento"
+                app:layout_constraintTop_toTopOf="@id/ivPasoParamento"
+                app:layout_constraintBottom_toBottomOf="@id/ivPasoParamento"
+                tools:layout_editor_absoluteY="241dp" />
+
+            <ImageView
+                android:id="@+id/ivPasoParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/paso_sobre_paramento"
+                app:layout_constraintStart_toEndOf="@id/cbPasoParamento"
+                app:layout_constraintTop_toBottomOf="@id/etLongitudCoronacionPasoEntubado" />
+
+            <TextView
+                android:id="@+id/tvAlturaObstaculoParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivPasoParamento"
+                android:text="Altura del obstáculo(H)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaObstaculoParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaObstaculoParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvAlturaSaltoParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaObstaculoParamento"
+                android:text="Altura del salto (S)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaSaltoParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaSaltoParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+            <TextView
+                android:id="@+id/tvProfundidadParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaSaltoParamento"
+                android:text="Profundidad de la poza al pie del azud (P)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etProfundidadParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProfundidadParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvDistanciaCoronacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etProfundidadParamento"
+                android:text="Distancia a coronación (DC)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etDistanciaCoronacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDistanciaCoronacion"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvAnchuraCoronacionParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etDistanciaCoronacion"
+                android:text="Anchura en coronación (w)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAnchuraCoronacionParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnchuraCoronacionParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvLongitudCoronacionParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAnchuraCoronacionParamento"
+                android:text="Longitud en coronación"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etLongitudCoronacionParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLongitudCoronacionParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvAlturaLaminaParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLongitudCoronacionParamento"
+                android:text="Altura de la lámina sobre el paramento (A)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etAlturaLaminaParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlturaLaminaParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+
+            <TextView
+                android:id="@+id/tvPendienteParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAlturaLaminaParamento"
+                android:text="Pendiente del paramento (%)"
+                tools:layout_editor_absoluteY="389dp" />
+
+            <EditText
+                android:id="@+id/etPendienteParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPendienteParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <TextView
+                android:id="@+id/tvVelocidadParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etPendienteParamento"
+                android:text="Velocidad sobre el paramento (V)"
+                tools:layout_editor_absoluteY="389dp" />
+
+
+            <EditText
+                android:id="@+id/etVelocidadParamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvVelocidadParamento"
+                android:ems="10"
+                android:inputType="textPersonName"
+                 />
+            <CheckBox
+                android:id="@+id/cbObsMixto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Obstáculo mixto (Marcar los diferentes onbstáculos que lo conformen)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etVelocidadParamento"
+                tools:layout_editor_absoluteY="1848dp" />
+            <CheckBox
+                android:id="@+id/cbCruceVial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cruce con vial (Marcar el tipo de obstáculo que genera)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbObsMixto"
+                tools:layout_editor_absoluteY="1848dp" />
+
+            <TextView
+                android:id="@+id/tvRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remanso"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbCruceVial"
+                tools:layout_editor_absoluteX="35dp"
+                tools:layout_editor_absoluteY="2654dp" />
+
+            <TextView
+                android:id="@+id/tvLongitudRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitud del remanso generado por el obstáculo (m)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRemanso"
+                tools:layout_editor_absoluteY="1968dp" />
+
+            <EditText
+                android:id="@+id/etLongitudRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLongitudRemanso"
+                tools:layout_editor_absoluteY="1987dp" />
+            <TextView
+                android:id="@+id/tvCaladoRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calado medio del cauce en el remanso (m)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLongitudRemanso"
+                tools:layout_editor_absoluteY="1968dp" />
+
+            <EditText
+                android:id="@+id/etCaladoRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCaladoRemanso"
+                tools:layout_editor_absoluteY="1987dp" />
+            <TextView
+                android:id="@+id/tvCaladoAntesRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calado medio del cauce ANTES del remanso (m)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etCaladoRemanso"
+                tools:layout_editor_absoluteY="1968dp" />
+
+            <EditText
+                android:id="@+id/etCaladoAntesRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCaladoAntesRemanso"
+                tools:layout_editor_absoluteY="1987dp" />
+
+            <TextView
+                android:id="@+id/tvAnchuraRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anchura media del cauce en el remanso (m)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etCaladoAntesRemanso"
+                tools:layout_editor_absoluteY="1968dp" />
+
+            <EditText
+                android:id="@+id/etAnchuraRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnchuraRemanso"
+                tools:layout_editor_absoluteY="1987dp" />
+
+            <TextView
+                android:id="@+id/tvAnchuraAntesRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anchura mesdia del cauce ANTES del remanso (m)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAnchuraRemanso"
+                tools:layout_editor_absoluteY="1968dp" />
+
+            <EditText
+                android:id="@+id/etAnchuraAntesRemanso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnchuraAntesRemanso"
+                tools:layout_editor_absoluteY="1987dp" />
+
+            <TextView
+                android:id="@+id/tvEfectoBarrera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grado de efecto barrera"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAnchuraAntesRemanso"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:layout_editor_absoluteY="2290dp" />
+
+            <TextView
+                android:id="@+id/tvAscenso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ascenso"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvEfectoBarrera"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dificultad de acceso a pie del obstáculo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAscenso"
+                />
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView9">
+                <RadioButton
+                    android:id="@+id/radioButton7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sí" />
+
+                <RadioButton
+                    android:id="@+id/radioButton6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No" />
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dependiendo condiciones de caudal" />
+
+            </RadioGroup>
+
+
+
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

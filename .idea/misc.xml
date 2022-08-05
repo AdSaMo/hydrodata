@@ -4,9 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/content_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_first.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_masas_agua.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_muestra_longitudinal.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_muestra_transversal.xml" value="0.2" />
         <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_muestras.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_muestras_transversales.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_muestras_transversales_list.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_second.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/adris/AndroidStudioProjects/Atlas/app/src/main/res/layout/fragment_tramos.xml" value="0.264" />
       </map>

@@ -47,5 +47,34 @@
         <action
             android:id="@+id/action_MuestrasFragment_to_TramosFragment"
             app:destination="@id/TramosFragment" />
+        <action
+            android:id="@+id/action_MuestrasFragment_to_MuestraTransversalFragment"
+            app:destination="@id/MuestraTransversalFragment" />
+        <action
+            android:id="@+id/action_MuestrasFragment_to_MuestraLongitudinalFragment"
+            app:destination="@id/MuestraLongitudinalFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/MuestraTransversalFragment"
+        android:name="com.logocito.atlas.ui.MuestraTransversalFragment"
+        android:label="Muestra transversal"
+        tools:layout="@layout/fragment_muestra_transversal">
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="@null"  />
+
+    </fragment>
+    <fragment
+        android:id="@+id/MuestraLongitudinalFragment"
+        android:name="com.logocito.atlas.ui.MuestraLongitudinalFragment"
+        android:label="Muestra longitudinal"
+        tools:layout="@layout/fragment_muestra_longitudinal">
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="@null"  />
+
+    </fragment>
+
 </navigation>

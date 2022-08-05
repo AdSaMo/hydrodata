@@ -24,3 +24,7 @@ abstract class Database : RoomDatabase() {
 
 }
 
+data class Identificador (
+    val id : Int,
+    val codigo : String,
+)

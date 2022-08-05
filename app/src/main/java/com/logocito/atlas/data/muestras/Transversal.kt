@@ -12,14 +12,21 @@ data class MuestraTransversal (
     val codigo : String,
     val idTramo:Int,
     var longitud : Int,
+    var coordenadaX : Long,
+    var coordenadaY : Long,
 )
+
 @Dao
 interface MuestrasTransversalesDao {
+    @Query("SELECT id FROM muestras_transversales WHERE idTramo = :idTramo")
+    fun obtenerIds(idTramo: Int): List<Int>
     @Query("SELECT codigo FROM muestras_transversales WHERE idTramo = :idTramo")
-    fun obtenerCodigosMuestrasTransversales(idTramo: Int) : List<String>
+    fun obtenerCodigos(idTramo: Int) : List<String>
     @Insert
-    fun crearMuestraTransversal(muestraTransversal: MuestraTransversal)
+    fun añadir(muestraTransversal: MuestraTransversal)
     @Query ("SELECT id FROM muestras_transversales WHERE codigo = :codigo")
     fun findId (codigo:String) : Int
+    @Update
+    fun actualizar (muestraTransversal: MuestraTransversal)
 
 }

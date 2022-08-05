@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.logocito.atlas.R
+import com.logocito.atlas.data.Identificador
 import com.logocito.atlas.databinding.FragmentMuestrasBinding
 
 
@@ -35,11 +38,16 @@ class MuestrasFragment : Fragment() {
 
     }
 
-    fun recargarParteLista (codigos : List<String>, tipo : String){
-        for (codigo in codigos){
+    fun recargarParteLista (muestras : List<Identificador>, tipo : String, navigationAction : Int){
+        for (muestra in muestras){
             val fila = TableRow(this.binding.tabla.context)
+            fila.setOnClickListener {
+                val navController = findNavController()
+                val bundle = bundleOf("id" to muestra.id)
+                navController.navigate(navigationAction, bundle)
+            }
             val prueba1 = TextView(fila.context)
-            prueba1.text = codigo
+            prueba1.text = muestra.codigo
             fila.addView(prueba1)
             val tipoView = TextView(fila.context)
             tipoView.text = tipo
@@ -50,18 +58,19 @@ class MuestrasFragment : Fragment() {
     }
     fun recargarLista () {
         this.binding.tabla.removeAllViews()
-        if(this.viewModel.codigosDeMuestrasTransversales.value != null){
-            this.recargarParteLista(this.viewModel.codigosDeMuestrasTransversales.value!!, "Transversal")
-        }
-        if(this.viewModel.codigosDeMuestrasLongitudinales.value != null) {
+        /*if(this.viewModel.codigosDeMuestrasTransversales.value != null){
+            this.recargarParteLista(this.viewModel.codigosDeMuestrasTransversales.value!!, "Transversal",R.id.action_MuestrasFragment_to_MuestraTransversalFragment)
+        }*/
+        this.viewModel.muestrasLongitudinales.value?.let{
             this.recargarParteLista(
-                this.viewModel.codigosDeMuestrasLongitudinales.value!!,
+                it,
                 "Longitudinal",
+                R.id.action_MuestrasFragment_to_MuestraLongitudinalFragment,
             )
         }
-        if(this.viewModel.codigosDeMuestrasSubtramos.value != null) {
-            this.recargarParteLista(this.viewModel.codigosDeMuestrasSubtramos.value!!, "Subtramo")
-        }
+       /*if(this.viewModel.codigosDeMuestrasSubtramos.value != null) {
+            this.recargarParteLista(this.viewModel.codigosDeMuestrasSubtramos.value!!, "Subtramo", R.id.action_MuestrasFragment_to_MuestraTransversalFragment)
+        }*/
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,7 +84,7 @@ class MuestrasFragment : Fragment() {
                 this.recargarLista()
             },
         )
-        this.viewModel.codigosDeMuestrasLongitudinales.observe(
+        this.viewModel.muestrasLongitudinales.observe(
             this.viewLifecycleOwner,
             Observer {
                 this.recargarLista()
