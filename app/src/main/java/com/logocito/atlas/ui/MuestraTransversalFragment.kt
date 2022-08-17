@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.logocito.atlas.R
+import com.logocito.atlas.data.muestras.MuestraTransversal
 import com.logocito.atlas.databinding.FragmentMuestraTransversalBinding
-import com.logocito.atlas.databinding.FragmentMuestrasBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +26,7 @@ class MuestraTransversalFragment : Fragment() {
     private var _binding : FragmentMuestraTransversalBinding? = null
     private val binding get() = _binding!!
     private val viewModel : MainActivityViewModel by activityViewModels()
+    private lateinit var muestra : MuestraTransversal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,12 @@ class MuestraTransversalFragment : Fragment() {
         }
         return binding.root
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.muestra.coordenadaX = this.binding.coordenadaX.text as Long
+        this.viewModel.cambiarMuestraTransversal(this.muestra)
     }
 
     /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

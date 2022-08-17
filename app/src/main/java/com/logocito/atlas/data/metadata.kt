@@ -4,8 +4,9 @@ package com.logocito.atlas.data
 @Retention (AnnotationRetention.RUNTIME)
 annotation class Campo(
     val descripcion : String,
-    val sección : String = "",
+    val sección : String ,
     val posición : Int,
+    val imagen : Int = -1,
 )
 
 @Target(AnnotationTarget.PROPERTY)

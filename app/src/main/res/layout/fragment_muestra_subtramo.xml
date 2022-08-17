@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MuestraLongitudinalFragment">
+    tools:context=".ui.MuestraSubtramoFragment">
 
     <EditText
         android:id="@+id/codigo"
@@ -45,44 +45,21 @@
             tools:layout_editor_absoluteY="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/seccionDimensiones"
+                android:id="@+id/seccionGeneral"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 tools:layout_conversion_absoluteHeight="0dp"
+                tools:layout_conversion_absoluteWidth="0dp"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_conversion_absoluteWidth="0dp"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp">
 
                 <TextView
-                    android:id="@+id/headerDimensiones"
+                    android:id="@+id/headerGeneral"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dimensiones"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/seccionTipoObra"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:layout_conversion_absoluteHeight="0dp"
-                tools:layout_conversion_absoluteWidth="0dp"
-                app:layout_constraintTop_toBottomOf="@id/seccionDimensiones"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="0dp">
-
-                <TextView
-                    android:id="@+id/headerTipoObra"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo de obra"
+                    android:text="General"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

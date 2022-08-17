@@ -53,12 +53,26 @@
         <action
             android:id="@+id/action_MuestrasFragment_to_MuestraLongitudinalFragment"
             app:destination="@id/MuestraLongitudinalFragment" />
+        <action
+            android:id="@+id/action_MuestrasFragment_to_MuestraSubtramoFragment"
+            app:destination="@id/MuestraSubtramoFragment" />
     </fragment>
     <fragment
         android:id="@+id/MuestraTransversalFragment"
         android:name="com.logocito.atlas.ui.MuestraTransversalFragment"
         android:label="Muestra transversal"
         tools:layout="@layout/fragment_muestra_transversal">
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="@null"  />
+
+    </fragment>
+    <fragment
+        android:id="@+id/MuestraSubtramoFragment"
+        android:name="com.logocito.atlas.ui.MuestraSubtramoFragment"
+        android:label="Subtramo"
+        tools:layout="@layout/fragment_muestra_subtramo">
         <argument
             android:name="id"
             app:argType="integer"

@@ -1,4 +1,5 @@
 package com.logocito.atlas.ui
+
 //Se importan todas las librerías que vamos a necesitar para nuestra actividad
 import android.app.Application
 import android.os.Bundle
@@ -10,14 +11,20 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.logocito.atlas.App
 import com.logocito.atlas.R
 import com.logocito.atlas.data.*
+import com.logocito.atlas.data.Muestra
 import com.logocito.atlas.data.muestras.*
 import com.logocito.atlas.databinding.ActivityMainBinding
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.FileOutputStream
+
 //Definimos nuestra clase principal que contará con métodos que actuarán como hooks para la lógica de la app.
 class MainActivity : AppCompatActivity() {
 //Las variables que declaramos con "lateinit" serán tenidas en cuenta más adelante cuando se ejecute onCreate.
@@ -26,7 +33,7 @@ class MainActivity : AppCompatActivity() {
        Este objeto permite establecer una conexión entre los views de los XML y la lógica de la función.*/
     private lateinit var binding: ActivityMainBinding
     //magia
-    //private val viewmodel : com.logocito.atlas.ui.ViewModel by viewModels()
+    private val viewModel : MainActivityViewModel by viewModels()
 
 //Primero de nuestros hooks (onCreate). Lo que lleve dentro se ejecutará al iniciar la aplicación.
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            this.viewModel.exportar()
         }
 
     }
@@ -109,10 +117,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val codigoDeTramo : LiveData<String> get() = _codigoDeTramo
     private val _muestrasLongitudinales= MutableLiveData<ArrayList<Identificador>>()
     val muestrasLongitudinales : LiveData<ArrayList<Identificador>> get() = _muestrasLongitudinales
-    private val _codigosDeMuestrasTransversales= MutableLiveData<ArrayList<Int>>()
-    val codigosDeMuestrasTransversales : LiveData<ArrayList<Int>> get() = _codigosDeMuestrasTransversales
-    private val _codigosDeMuestrasSubtramos= MutableLiveData<ArrayList<Int>>()
-    val codigosDeMuestrasSubtramos : LiveData<ArrayList<Int>> get() = _codigosDeMuestrasSubtramos
+    private val _muestrasTransversales= MutableLiveData<ArrayList<Identificador>>()
+    val muestrasTransversales : LiveData<ArrayList<Identificador>> get() = _muestrasTransversales
+    private val _muestrasSubtramos= MutableLiveData<ArrayList<Identificador>>()
+    val muestrasSubtramos : LiveData<ArrayList<Identificador>> get() = _muestrasSubtramos
 
     //Cuarta pantalla: Transversal
     private val _codigoDeMuestraTransversal= MutableLiveData<String>()
@@ -121,6 +129,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     //Cuarta pantalla: Longitudinal
     private val _muestraLongitudinal= MutableLiveData<MuestraLongitudinal>()
     val muestraLongitudinal : LiveData<MuestraLongitudinal> get() = _muestraLongitudinal
+
+    //Cuarta pantalla: Subtramo
+    private val _muestraSubtramo= MutableLiveData<MuestraSubtramo>()
+    val muestraSubtramo : LiveData<MuestraSubtramo> get() = _muestraSubtramo
 
     init {
         val app = this.getApplication<App>()
@@ -199,6 +211,13 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             cauce = Cauce.COBERTURA,
             revestimiento = Revestimiento.SIN_REVESTIR,
             observacionesGenerales = "",
+            anchoCoronacion = AnchoCoronacion.ENTREUNOYTRES,
+            alturaInterior = "",
+            alturaExterior = "",
+            taludInterior = "",
+            taludExterior = "",
+            distanciaMediaCauce = "",
+            otros = "",
 
         )
         this.daoMuestrasLongitudinales.añadir(muestraLongitudinal)
@@ -217,6 +236,55 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             id=0,
             idTramo = idTramo,
             codigo = codigoMuestraSubtramo,
+            inicioX = "",
+            finX = "",
+            inicioY = "",
+            finY = "",
+            longiSubtramo = "",
+            anchoCauce = "",
+            anchoTopo = "",
+            anchoFuncional = "",
+            accesiblidad = "",
+            esRoca = false,
+            esColuvial = false,
+            esAluvial = false,
+            tamañoDominanteRocoso = TamañoDominanteRocoso.ENTRECUARENTAYSETENTA,
+            tamañoDominanteGrueso = TamañoDominanteGrueso.ENTRESETENTAYNOVENTA,
+            tamañoDominanteFino = TamañoDominanteFino.ENTRECUARENTAYSETENTA,
+            tamañoDominanteLodos = TamañoDominanteLodos.ENTRECUARENTAYSETENTA,
+            clasificacionSedimentos = ClasificacionSedimentos.EFECTIVA,
+            pozaMarmita = PozaMarmita.PRESENTE,
+            saltoPoza = SaltoPoza.PRESENTE,
+            rapidoPoza = RapidoPoza.PRESENTE,
+            rapidoRemanso = RapidoRemanso.PRESENTE,
+            rapidoContinuo = RapidoContinuo.PRESENTE,
+            grada = Grada.PRESENTE,
+            rampa = Rampa.PRESENTE,
+            tabla = Tabla.PRESENTE,
+            principalModificada = PrincipalModificada.SI,
+            otra = "",
+            barraMarginal = BarraMarginal.PRINCIPAL,
+            barraCauce = BarraCauce.PRESENTE,
+            isla = Isla.PRESENTE,
+            canalSecundario = CanalSecundario.PRESENTE,
+            canalCrecida = CanalCrecida.PRESENTE,
+            surco = Surco.PRESENTE,
+            cauceAbandonado = CauceAbandonado.PRESENTE,
+            sinNatural = SinNatural.PRESENTE,
+            otraFormas = "",
+            movilidadSedimentos = MovilidadSedimentos.EFECTIVA,
+            sintomasIncision = SintomasIncision.SI,
+            diferenciaAltura = "",
+            gradoAccesibilidad = "",
+            remociones = false,
+            alter = false,
+            descripcionAlter = "",
+            descripcionRemociones = "",
+            detritosVegetales = DetritosVegetales.MENORCUARENTA,
+            orillasVegetadas = OrillasVegetadas.MENORCUARENTA,
+            macrofitosSumergidos = MacrofitosSumergidos.MENORCUARENTA,
+            obsHabitats = "",
+
         )
         this.daoMuestrasSubtramos.añadir(muestraSubtramo)
         this.cargarTramo(codigoTramo)
@@ -261,6 +329,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         this.daoMuestrasLongitudinales.actualizar(muestra)
     }
 
+    fun cambiarMuestraTransversal(muestra : MuestraTransversal){
+        this.daoMuestrasTransversales.actualizar(muestra)
+    }
+
+    fun cambiarMuestraSubtramo(muestra : MuestraSubtramo){
+        this.daoMuestrasSubtramos.actualizar(muestra)
+    }
+
     fun cargarMasaAgua(codigo : String,){
         val idMasaAgua = daoMasasAgua.findId(codigo)
         this._codigoDeMasaAgua.postValue(codigo)
@@ -269,12 +345,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun cargarTramo(codigo : String,){
         val idTramo = daoTramos.findId(codigo)
         this._codigoDeTramo.postValue(codigo)
-        val codigosMuestrasTransversales = daoMuestrasTransversales.obtenerIds(idTramo) as ArrayList<Int>
-        this._codigosDeMuestrasTransversales.postValue(codigosMuestrasTransversales)
+        val muestrasTransversales = daoMuestrasTransversales.cargarTodas(idTramo) as ArrayList<Identificador>
+        this._muestrasTransversales.postValue(muestrasTransversales)
         val muestrasLongitudinales = daoMuestrasLongitudinales.cargarTodas(idTramo) as ArrayList<Identificador>
         this._muestrasLongitudinales.postValue(muestrasLongitudinales)
-        val codigosMuestrasSubtramos = daoMuestrasSubtramos.obtenerIds(idTramo) as ArrayList<Int>
-        this._codigosDeMuestrasSubtramos.postValue(codigosMuestrasSubtramos)
+        val muestrasSubtramos = daoMuestrasSubtramos.cargarTodas(idTramo) as ArrayList<Identificador>
+        this._muestrasSubtramos.postValue(muestrasSubtramos)
     }
 
     fun cargarMuestraLongitudinal (id : Int){
@@ -284,10 +360,57 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     /*fun cargarMuestraTransversal (id : Int){
         val muestraTransversal = this.daoMuestrasTransversales.cargar(id)
         this._muestraTransversal.postValue(muestraTransversal)
-    }
-    fun cargarMuestraSubtramo (id : Int){
-        val muestraLongitudinal = this.daoMuestrasLongitudinales.cargar(id)
-        this._muestraLongitudinal.postValue(muestraLongitudinal)
     }*/
-}
+    fun cargarMuestraSubtramo (id : Int){
+        val muestraSubtramo = this.daoMuestrasSubtramos.cargar(id)
+        this._muestraSubtramo.postValue(muestraSubtramo)
+    }
 
+    fun exportar () {
+        val workBook = XSSFWorkbook()
+        val sheetLongitudinales = workBook.createSheet("Longitudinales")
+        this.exportarSheet(this.daoMuestrasLongitudinales, sheetLongitudinales)
+        val sheetTransversales = workBook.createSheet("Transversales")
+        this.exportarSheet(this.daoMuestrasTransversales, sheetTransversales)
+        val sheetSubtramos = workBook.createSheet("Subtramos")
+        this.exportarSheet(this.daoMuestrasSubtramos, sheetSubtramos)
+        val outputStream = FileOutputStream("atlas.xlsx")
+        workBook.write(outputStream)
+        workBook.close()
+    }
+
+    private inline fun <reified T : Any> exportarSheet(dao : Muestra<T>,sheet : XSSFSheet){
+        val campos = sortCampos(T::class)
+
+        val cabeceraSecciones = sheet.createRow(0)
+        val cabeceraCampos = sheet.createRow(1)
+        cabeceraCampos.createCell(0).setCellValue("Código de muestra")
+        cabeceraCampos.createCell(1).setCellValue("Código de tramo")
+        cabeceraCampos.createCell(2).setCellValue("Código de masa de agua")
+        var columnIndex = 3
+        for ((seccion, subcampos) in campos){
+            cabeceraSecciones.createCell(columnIndex).setCellValue(seccion)
+            for (campo in subcampos){
+                cabeceraCampos.createCell(columnIndex).setCellValue(campo.name)
+                println(campo.name)
+                columnIndex += 1
+            }
+        }
+
+        var rowIndex = 2
+        val muestras = dao.cargarTodasTodas()
+        for (muestra in muestras){
+            val fila = sheet.createRow(rowIndex)
+            var filaColumnIndex = 3
+            for ((seccion, subcampos) in campos){
+                for (campo in subcampos){
+                    val valor = campo.call(muestra) as String
+                    fila.createCell(filaColumnIndex).setCellValue(valor)
+                    println(valor)
+                    filaColumnIndex += 1
+                }
+            }
+            rowIndex += 1
+        }
+    }
+}

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.logocito.atlas"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 32
         versionCode = 1
         versionName = "1.0"
@@ -79,4 +79,9 @@ dependencies {
 
     // optional - Paging 3 Integration
     //implementation("androidx.room:room-paging:2.5.0-alpha02")
+
+
+    val poiVersion = "5.2.2"
+    implementation("org.apache.poi:poi:${poiVersion}")
+    implementation("org.apache.poi:poi-ooxml:${poiVersion}")
 }

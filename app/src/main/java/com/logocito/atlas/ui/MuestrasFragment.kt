@@ -58,9 +58,7 @@ class MuestrasFragment : Fragment() {
     }
     fun recargarLista () {
         this.binding.tabla.removeAllViews()
-        /*if(this.viewModel.codigosDeMuestrasTransversales.value != null){
-            this.recargarParteLista(this.viewModel.codigosDeMuestrasTransversales.value!!, "Transversal",R.id.action_MuestrasFragment_to_MuestraTransversalFragment)
-        }*/
+
         this.viewModel.muestrasLongitudinales.value?.let{
             this.recargarParteLista(
                 it,
@@ -68,17 +66,29 @@ class MuestrasFragment : Fragment() {
                 R.id.action_MuestrasFragment_to_MuestraLongitudinalFragment,
             )
         }
-       /*if(this.viewModel.codigosDeMuestrasSubtramos.value != null) {
-            this.recargarParteLista(this.viewModel.codigosDeMuestrasSubtramos.value!!, "Subtramo", R.id.action_MuestrasFragment_to_MuestraTransversalFragment)
-        }*/
 
+        this.viewModel.muestrasSubtramos.value?.let{
+            this.recargarParteLista(
+                it,
+                "Subtramo",
+                R.id.action_MuestrasFragment_to_MuestraSubtramoFragment,
+            )
+        }
+
+        this.viewModel.muestrasTransversales.value?.let{
+            this.recargarParteLista(
+                it,
+                "Transversal",
+                R.id.action_MuestrasFragment_to_MuestraTransversalFragment,
+            )
+        }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.viewModel.codigoDeTramo.observe(this.viewLifecycleOwner, Observer {
             binding.editTramoCode.setText(this.viewModel.codigoDeTramo.value)
         })
-        this.viewModel.codigosDeMuestrasTransversales.observe(
+        this.viewModel.muestrasTransversales.observe(
             this.viewLifecycleOwner,
             Observer {
                 this.recargarLista()
@@ -90,7 +100,7 @@ class MuestrasFragment : Fragment() {
                 this.recargarLista()
             },
         )
-        this.viewModel.codigosDeMuestrasSubtramos.observe(
+        this.viewModel.muestrasSubtramos.observe(
             this.viewLifecycleOwner,
             Observer {
                 this.recargarLista()
