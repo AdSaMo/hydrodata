@@ -61,6 +61,7 @@ abstract class Muestra <ClaseModelo : Any> : Fragment() {
         for ((seccion, campos) in formularioCampos) {
             val constraints = ConstraintSet()
             val seccionConstraintLayoutIdentifier = "seccion${seccion}"
+            println(seccionConstraintLayoutIdentifier)
             val seccionConstraintLayoutId = lista.context.resources.getIdentifier(seccionConstraintLayoutIdentifier, "id",lista.context.packageName)
             val seccionConstraintLayout = lista.findViewById<ConstraintLayout>(seccionConstraintLayoutId)
             val seccionHeader = seccionConstraintLayout.getChildAt(0)
@@ -147,7 +148,12 @@ abstract class Muestra <ClaseModelo : Any> : Fragment() {
                 if (campoTipo == kotlin.Boolean::class) {
                     val formularioView = view.findViewById<CheckBox>(viewId)
                     formularioView.isChecked = propiedad.call(muestra) as Boolean
-                }else if (campoEsUnEnum){
+                } else if(campoTipo == kotlin.Float::class){
+                    val formularioView = view.findViewById<EditText>(viewId)
+                    val valorNumerico = propiedad.call(muestra) as Float
+                    val valorTextual = valorNumerico.toString()
+                    formularioView.setText(valorTextual)
+                } else if (campoEsUnEnum){
                     val formularioView = view.findViewById<RadioGroup>(viewId)
                     val valor = propiedad.call(muestra) as Enum<*>
                     //val nombreConstante = valor.toString()
@@ -175,7 +181,15 @@ abstract class Muestra <ClaseModelo : Any> : Fragment() {
                 if (campoTipo == kotlin.Boolean::class) {
                     val formularioView = view.findViewById<CheckBox>(viewId)
                     propiedadMutable.setter.call(muestra, formularioView.isChecked)
-                }else if (campoEsUnEnum){
+                } else if(campoTipo == kotlin.Float::class){
+                    val formularioView = view.findViewById<EditText>(viewId)
+                    val valorTextual = formularioView.text.toString()
+                    val valorNumérico = when (valorTextual){
+                        "" -> 0.0F
+                        else -> valorTextual.toFloat()
+                    }
+                    propiedadMutable.setter.call(muestra, valorNumérico)
+                } else if (campoEsUnEnum){
                     val radioGroup  = view.findViewById<RadioGroup>(viewId)
                     val radioButon = radioGroup.findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
                    // val constantName = radioButon.tag

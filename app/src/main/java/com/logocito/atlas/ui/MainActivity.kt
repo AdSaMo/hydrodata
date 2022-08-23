@@ -19,11 +19,15 @@ import com.logocito.atlas.App
 import com.logocito.atlas.R
 import com.logocito.atlas.data.*
 import com.logocito.atlas.data.Muestra
+import com.logocito.atlas.data.MuestraDao
 import com.logocito.atlas.data.muestras.*
 import com.logocito.atlas.databinding.ActivityMainBinding
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileOutputStream
+import kotlin.reflect.KClass
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.isSubclassOf
 
 //Definimos nuestra clase principal que contará con métodos que actuarán como hooks para la lógica de la app.
 class MainActivity : AppCompatActivity() {
@@ -96,6 +100,8 @@ fun encontrarCodigoDisponible (lista : List<String>) : String {
 }
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application){
+    private var app : App
+
     private  var daoMasasAgua : MasaAguaDao
     private  var daoTramos : TramoDao
     private  var daoMuestrasTransversales : MuestrasTransversalesDao
@@ -123,6 +129,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val muestrasSubtramos : LiveData<ArrayList<Identificador>> get() = _muestrasSubtramos
 
     //Cuarta pantalla: Transversal
+
+    private val _muestraTransversal= MutableLiveData<MuestraTransversal>()
+    val muestraTransversal : LiveData<MuestraTransversal> get() = _muestraTransversal
+
     private val _codigoDeMuestraTransversal= MutableLiveData<String>()
     val codigoDeMuestraTransversal : LiveData<String> get() = _codigoDeMuestraTransversal
 
@@ -135,7 +145,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val muestraSubtramo : LiveData<MuestraSubtramo> get() = _muestraSubtramo
 
     init {
-        val app = this.getApplication<App>()
+        this.app = this.getApplication<App>()
         this.daoMasasAgua = app.database.masaAguaDao()
         this._codigosDeMasasDeAgua.postValue(this.daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String>)
         this.daoTramos = app.database.tramoDao()
@@ -184,6 +194,87 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             longitud = 0,
             coordenadaX = 0,
             coordenadaY = 0,
+            acceso = Acceso.MD,
+            descripcionAcceso = "",
+            regadio = false,
+            ganadero = false,
+            consumoHumano = false,
+            industrial = false,
+            acuicultura = false,
+            transvaseHidro = false,
+            desconocido = false,
+            canalLateral = CanalLateral.NO,
+            rejillas = Rejillas.NO,
+            proyecto = false,
+            construccion = false,
+            explotacion = false,
+            fueraServicio = false,
+            abandonado = false,
+            abandonadoRuinas = false,
+            demolido = false,
+            otrosConservacionE = false,
+            colmatado = Colmatado.NO,
+            saltoVertical = false,
+            saltoAlt = 0.0F,
+            saltoProfPoza = 0.0F,
+            saltoAnchuraCorona = 0.0F,
+            saltoLongCorona = 0.0F,
+            saltoLaminaCorona = 0.0F,
+            pasoEntubado = false,
+            pasoVelocidad = 0.0F,
+            pasoDiametro = 0.0F,
+            pasoAltura = 0.0F,
+            pasoLongitud = 0.0F,
+            pasoLongitudCorona = 0.0F,
+            pasoParamento = false,
+            paramentoAlturaObs = 0.0F,
+            paramentoAlturaSal = 0.0F,
+            paramentoProfundidad = 0.0F,
+            paramentoDistanciaCoronacion = 0.0F,
+            paramentoAnchuraCoronacion = 0.0F,
+            paramentoLongitudCoronacion = 0.0F,
+            paramentoAlturaLamPar = 0.0F,
+            paramentoPendiente = 0.0F,
+            paramentoVel = 0.0F,
+            mixto = false,
+            cruceVial = false,
+            remansoLongitud = 0.0F,
+            remansoCaladoRem = 0.0F,
+            remansoAnchRem = 0.0F,
+            remansoAnchAnt = 0.0F,
+            remansoCaladoAnt = 0.0F,
+            ascensoDifAccesso = AscensoDifAccesso.NO,
+            ascensoDifPaso = AscensoDifPaso.NO,
+            ascensoAusenciaLlamada = AscensoAusenciaLlamada.NO,
+            ascensoPresenciaTurbulencias = AscensoPresenciaTurbulencias.NO,
+            ascensoSuperficieRugosa = AscensoSuperficieRugosa.NO,
+            ascensoPresenciaDescansaderos = AscensoPresenciaDescansaderos.NO,
+            descensoFormacionEmbalse = DescensoFormacionEmbalse.NO,
+            descensoDificultadPaso = DescensoDificultadPaso.NO,
+            descensoPresenciaCanal = DescensoPresenciaCanal.NO,
+            descensoPresenciaCanalDer = DescensoPresenciaCanalDer.NO,
+            presenciaDisp = PresenciaDisp.NO,
+            accesibleAguasAbajo = AccesibleAguasAbajo.NO,
+            accesibleAguasArriba = AccesibleAguasArriba.NO,
+            efectoLlamada = EfectoLlamada.NO,
+            estanques = Estanques.NO,
+            pozaRemonte = PozaRemonte.NO,
+            flujo = Flujo.NO,
+            discontinuidadesObstáculos = DiscontinuidadesObstáculos.NO,
+            dsAccesibilidad = DsAccesibilidad.NO,
+            dsEfectoLlamada = DsEfectoLlamada.NO,
+            dsFlujo = DsFlujo.NO,
+            dsDiscObs = DsDiscObs.NO,
+            observacionesGen = "",
+            saltoAltObs = 0.0F,
+            coordenadasX = "",
+            coordenadasY = "",
+            husoHorario = HusoHorario.TREINTA,
+            canalCanal = false,
+            estanquesSucesivos = false,
+            prePresas = false,
+            rampasPiedras = false,
+            ralentizadores = false,
         )
         this.daoMuestrasTransversales.añadir(muestraTransversal)
         this.cargarTramo(codigoTramo)
@@ -218,7 +309,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             taludExterior = "",
             distanciaMediaCauce = "",
             otros = "",
-
+            imgDimensiones = "",
+            coorInX = "",
+            coorInY = "",
+            coorFnX = "",
+            coorFnY = "",
+            utm = Utm.TREINTA,
         )
         this.daoMuestrasLongitudinales.añadir(muestraLongitudinal)
         this.cargarTramo(codigoTramo)
@@ -284,7 +380,39 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             orillasVegetadas = OrillasVegetadas.MENORCUARENTA,
             macrofitosSumergidos = MacrofitosSumergidos.MENORCUARENTA,
             obsHabitats = "",
-
+            miConectEco = "",
+            mdConectEco = "",
+            gConectEco = "",
+            miCauceSombreado = "",
+            mdCauceSombreado = "",
+            gCauceSombreado = "",
+            miConectTransv = "",
+            mdConectTransv = "",
+            gConectTransv = "",
+            gradoContacto = GradoContacto.ESCASA,
+            gradoContactoObservaciones = "",
+            formacionDominante = "",
+            formacionAcompañante = "",
+            eRegresiva = "",
+            eAutoctonas = "",
+            eAloctonas = "",
+            naturalidad = "",
+            especies = "",
+            categoriaDiversidad = CategoriaDiversidad.BAJA,
+            categoriaDiversidadObs = "",
+            funcionalidadRibera = "",
+            zonTransversal = "",
+            zonPermeable = "",
+            calidadObservaciones = "",
+            miAnchuraMedia = "",
+            mdAnchuraMedia = "",
+            miGradoAfeccion = MiGradoAfeccion.BAJA,
+            mdGradoAfeccion = MdGradoAfeccion.BAJA,
+            miGradoAfeccionAloctona = MiGradoAfeccionAloctona.BAJA,
+            mdGradoAfeccionAloctona = MdGradoAfeccionAloctona.BAJA,
+            afeccionObs = "",
+            acelerada = "",
+            depo = "",
         )
         this.daoMuestrasSubtramos.añadir(muestraSubtramo)
         this.cargarTramo(codigoTramo)
@@ -357,10 +485,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         val muestraLongitudinal = this.daoMuestrasLongitudinales.cargar(id)
         this._muestraLongitudinal.postValue(muestraLongitudinal)
     }
-    /*fun cargarMuestraTransversal (id : Int){
+    fun cargarMuestraTransversal (id : Int) {
         val muestraTransversal = this.daoMuestrasTransversales.cargar(id)
         this._muestraTransversal.postValue(muestraTransversal)
-    }*/
+    }
     fun cargarMuestraSubtramo (id : Int){
         val muestraSubtramo = this.daoMuestrasSubtramos.cargar(id)
         this._muestraSubtramo.postValue(muestraSubtramo)
@@ -374,25 +502,27 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         this.exportarSheet(this.daoMuestrasTransversales, sheetTransversales)
         val sheetSubtramos = workBook.createSheet("Subtramos")
         this.exportarSheet(this.daoMuestrasSubtramos, sheetSubtramos)
-        val outputStream = FileOutputStream("atlas.xlsx")
+        val path = this.app.getExternalFilesDir(null)
+        val outputStream = FileOutputStream("${path}/atlas.xlsx")
         workBook.write(outputStream)
         workBook.close()
     }
 
-    private inline fun <reified T : Any> exportarSheet(dao : Muestra<T>,sheet : XSSFSheet){
+    private inline fun <reified T : Muestra > exportarSheet(dao : MuestraDao<T>, sheet : XSSFSheet)
+    {
         val campos = sortCampos(T::class)
 
         val cabeceraSecciones = sheet.createRow(0)
         val cabeceraCampos = sheet.createRow(1)
-        cabeceraCampos.createCell(0).setCellValue("Código de muestra")
+        cabeceraCampos.createCell(2).setCellValue("Código de muestra")
         cabeceraCampos.createCell(1).setCellValue("Código de tramo")
-        cabeceraCampos.createCell(2).setCellValue("Código de masa de agua")
+        cabeceraCampos.createCell(0).setCellValue("Código de masa de agua")
         var columnIndex = 3
         for ((seccion, subcampos) in campos){
             cabeceraSecciones.createCell(columnIndex).setCellValue(seccion)
             for (campo in subcampos){
-                cabeceraCampos.createCell(columnIndex).setCellValue(campo.name)
-                println(campo.name)
+                val campoData = campo.findAnnotation<Campo>()
+                cabeceraCampos.createCell(columnIndex).setCellValue(campoData?.descripcion ?: campo.name)
                 columnIndex += 1
             }
         }
@@ -401,10 +531,33 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         val muestras = dao.cargarTodasTodas()
         for (muestra in muestras){
             val fila = sheet.createRow(rowIndex)
+            val tramo = this.daoTramos.cargar(muestra.idTramo)
+            val codigoMasaAgua =this.daoMasasAgua.obtenerCodigo(tramo.masaAgua)
+            fila.createCell(0).setCellValue(codigoMasaAgua)
+            //val codigoTramo = this.daoTramos.obtenerCodigo(muestra.idTramo)
+            fila.createCell(1).setCellValue(tramo.codigo)
+            fila.createCell(2).setCellValue(muestra.codigo)
             var filaColumnIndex = 3
             for ((seccion, subcampos) in campos){
                 for (campo in subcampos){
-                    val valor = campo.call(muestra) as String
+                    var valor : String
+                    val campoTipo = campo.returnType.classifier as KClass<*>
+                    val campoEsUnEnum = campoTipo.isSubclassOf(Enum::class)
+                    if (campoEsUnEnum){
+                        valor = (campo.call(muestra) as Enum<*>).toString()
+
+                    } else if (campoTipo == kotlin.Float::class){
+                        valor = (campo.call(muestra) as Float).toString()
+                    } else if(campoTipo == kotlin.Boolean::class){
+                        valor = when(campo.call(muestra) as Boolean){
+                            true -> "TRUE"
+                            false -> "FALSE"
+                        }
+
+                    }else{
+                        valor = campo.call(muestra) as String
+                    }
+
                     fila.createCell(filaColumnIndex).setCellValue(valor)
                     println(valor)
                     filaColumnIndex += 1

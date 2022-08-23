@@ -21,15 +21,21 @@ data class MasaAgua(
 interface MasaAguaDao {
     @Query ("SELECT codigo FROM masas_agua")
     fun obtenerCodigosMasasAgua() : List<String>
+
     @Insert
     fun añadirMasaAgua (masaAgua:MasaAgua)
+
     @Delete
     fun eliminar (vararg masaAgua: MasaAgua)
+
     @Query ("SELECT * FROM masas_agua WHERE codigo = :codigo")
     fun cargar (codigo: String) : MasaAgua
     @Update
     fun modificar (masaAgua: MasaAgua)
+
     @Query ("SELECT id FROM masas_agua WHERE codigo = :codigo")
     fun findId (codigo:String) : Int
 
+    @Query("SELECT codigo FROM masas_agua WHERE id = :id ")
+    fun obtenerCodigo (id : Int) : String
 }

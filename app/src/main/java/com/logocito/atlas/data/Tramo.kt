@@ -16,13 +16,22 @@ data class Tramo (
 interface TramoDao {
     @Query("SELECT codigo FROM tramos WHERE masaAgua = :idMasaAgua ")
     fun obtenerCodigosTramos(idMasaAgua: Int) : List<String>
+
     @Insert
     fun crearTramo(tramo : Tramo)
+
     @Query ("SELECT * FROM tramos WHERE codigo = :codigo")
     fun cargar (codigo: String) : Tramo
+
+    @Query ("SELECT * FROM tramos WHERE id = :id")
+    fun cargar (id : Int) : Tramo
+
     @Update
     fun modificar (tramo: Tramo)
+
     @Query ("SELECT id FROM tramos WHERE codigo = :codigo")
     fun findId (codigo:String) : Int
 
+    @Query("SELECT codigo FROM tramos WHERE id = :id ")
+    fun obtenerCodigo (id : Int) : String
 }

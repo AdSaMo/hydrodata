@@ -2,10 +2,7 @@ package com.logocito.atlas.data.muestras
 
 import androidx.room.*
 import com.logocito.atlas.R
-import com.logocito.atlas.data.Campo
-import com.logocito.atlas.data.Identificador
-import com.logocito.atlas.data.Muestra
-import com.logocito.atlas.data.Opcion
+import com.logocito.atlas.data.*
 
 enum class UbicacionObra {
     MARGEN_DEL_RIO,
@@ -69,138 +66,195 @@ enum class AnchoCoronacion {
     MAYORQUETRES
 }
 
+enum class Utm {
+    @Opcion(
+        descripcion = "29"
+    )
+    VENTINUEVE,
+    @Opcion(
+        descripcion = "30"
+    )
+    TREINTA,
+    @Opcion(
+        descripcion = "31"
+    )
+    TRANTAIUNO,
+}
+
 @Entity(
     tableName ="muestras_longitudinales"
 )
 data class MuestraLongitudinal (
     @PrimaryKey(autoGenerate = true)
     val id : Int,
-    val codigo : String,
-    val idTramo:Int,
+    override val codigo : String,
+    override val idTramo:Int,
+
+    @Campo(
+        descripcion = "Huso UTM",
+        posición = 0,
+        sección = "General"
+    )
+    var utm : Utm,
+
+    @Campo(
+        descripcion = "Coordenada inicio de obra X",
+        posición = 1,
+        sección = "General"
+    )
+    var coorInX : String,
+
+    @Campo(
+        descripcion = "Coordenada inicio de obra Y",
+        posición = 2,
+        sección = "General"
+    )
+    var coorInY : String,
+
+    @Campo(
+        descripcion = "Coordenada fin de obra X",
+        posición = 3,
+        sección = "General"
+    )
+    var coorFnX : String,
+
+    @Campo(
+        descripcion = "Coordenada fin de obra Y",
+        posición = 4,
+        sección = "General"
+    )
+    var coorFnY : String,
+
+    @Campo(
+        descripcion = "Estado de conservación",
+        posición = 5,
+        sección = "General"
+    )
+    var estadoConservacion: EstadoConservacion,
 
     @Campo(
         descripcion = "Ubicación de la obra",
-        posición = 1,
-        sección = "TipoObra"
+        posición = 6,
+        sección = "General"
     )
     var ubicacionObra: UbicacionObra,
 
     @Campo(
         descripcion = "Margen donde se sitúa la obra",
-        posición = 2,
-        sección = "TipoObra"
+        posición = 7,
+        sección = "General"
     )
     var margen: Margen,
+
+    @Campo(
+        descripcion = "Tipo de obra",
+        posición = 8,
+        sección = "TipoObra"
+    )
+    var tipoObra: TipoObra,
 
     @Campo(
         descripcion = "Observaciones",
         posición = 9,
         sección = "TipoObra"
     )
-    var observacionesGenerales : String,
-
-    @Campo(
-        descripcion = "Observaciones",
-        posición = 4,
-        sección = "TipoObra"
-    )
     var tipoObraObservaciones : String,
 
     @Campo(
-        descripcion = "Estado de conservación",
-        posición = 0,
-        sección = "TipoObra"
-    )
-    var estadoConservacion: EstadoConservacion,
-
-    @Campo(
-        descripcion = "Tipo de obra",
-        posición = 3,
-        sección = "TipoObra"
-    )
-    var tipoObra: TipoObra,
-
-    @Campo(
-        descripcion = "Material principal",
-        posición = 7,
-        sección = "TipoObra"
-    )
-    var materialPrincipal: MaterialPrincipal,
-
-    @Campo(
         descripcion = "Función de la obra",
-        posición =5,
+        posición =10,
         sección = "TipoObra"
     )
     var funcionObra: FuncionObra,
 
     @Campo(
         descripcion = "Cauce",
-        posición =6,
+        posición =11,
         sección = "TipoObra"
     )
     var cauce: Cauce,
 
     @Campo(
+        descripcion = "Material principal",
+        posición = 12,
+        sección = "TipoObra"
+    )
+    var materialPrincipal: MaterialPrincipal,
+
+    @Campo(
         descripcion = "Revestimiento",
-        posición = 8,
+        posición = 13,
         sección = "TipoObra"
     )
     var revestimiento: Revestimiento,
 
     @Campo(
+        descripcion = "Anotaciones extra del bloque Dimensiones",
+        posición =15,
+        sección = "Dimensiones",
+        imagen = R.drawable.longitudinal,
+    )
+    var imgDimensiones: String,
+
+    @Campo(
         descripcion = "Ancho en coronación en metros (AC)",
-        posición =10,
+        posición =16,
         sección = "Dimensiones"
     )
     var anchoCoronacion: AnchoCoronacion,
 
     @Campo(
         descripcion = "Altura interior (Talud cauce) en metros (Hi)",
-        posición = 11,
+        posición = 17,
         sección = "Dimensiones"
     )
     var alturaInterior : String,
 
     @Campo(
         descripcion = "Altura exterior en metros (He)",
-        posición = 12,
+        posición = 18,
         sección = "Dimensiones"
     )
     var alturaExterior : String,
 
     @Campo(
         descripcion = "Longitud talud interior en metros (talud cauce) (Li)",
-        posición = 13,
+        posición = 19,
         sección = "Dimensiones",
-        imagen = R.drawable.paso_entubado,
     )
     var taludInterior : String,
 
     @Campo(
         descripcion = "Longitud del talud exterior en metros (Le)",
-        posición = 14,
+        posición = 20,
         sección = "Dimensiones"
     )
     var taludExterior : String,
 
     @Campo(
         descripcion = "Distancia media al cauce activo en metros (Dc)",
-        posición = 15,
+        posición = 21,
         sección = "Dimensiones"
     )
     var distanciaMediaCauce : String,
 
     @Campo(
         descripcion = "Otros",
-        posición = 16,
+        posición = 22,
         sección = "Dimensiones"
     )
     var otros : String,
-)
+
+    @Campo(
+        descripcion = "",
+        posición = 23,
+        sección = "ObservacionesF"
+    )
+    var observacionesGenerales : String,
+) : Muestra ()
 
 @Dao
-interface MuestrasLongitudinalesDao : Muestra <MuestraLongitudinal>  {
+interface MuestrasLongitudinalesDao : MuestraDao <MuestraLongitudinal>  {
     @Query("SELECT id FROM muestras_longitudinales WHERE idTramo = :idTramo")
     abstract override fun obtenerIds(idTramo: Int): List<Int>
 

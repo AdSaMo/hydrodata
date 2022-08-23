@@ -1,10 +1,13 @@
 package com.logocito.atlas.data
 
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
 
-interface Muestra <T>{
+abstract class Muestra {
+    abstract val codigo : String
+    abstract val idTramo:Int
+}
+
+
+interface MuestraDao <T>{
     //@Query("SELECT id FROM muestras_longitudinales WHERE idTramo = :idTramo")
     fun obtenerIds(idTramo: Int): List<Int>
 
