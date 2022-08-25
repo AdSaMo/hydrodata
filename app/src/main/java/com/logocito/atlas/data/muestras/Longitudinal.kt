@@ -86,9 +86,9 @@ enum class Utm {
 )
 data class MuestraLongitudinal (
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
-    override val codigo : String,
-    override val idTramo:Int,
+    val id : Long,
+    override var codigo : String,
+    override val idTramo:Long,
 
     @Campo(
         descripcion = "Huso UTM",
@@ -189,14 +189,6 @@ data class MuestraLongitudinal (
     var revestimiento: Revestimiento,
 
     @Campo(
-        descripcion = "Anotaciones extra del bloque Dimensiones",
-        posición =15,
-        sección = "Dimensiones",
-        imagen = R.drawable.longitudinal,
-    )
-    var imgDimensiones: String,
-
-    @Campo(
         descripcion = "Ancho en coronación en metros (AC)",
         posición =16,
         sección = "Dimensiones"
@@ -246,7 +238,7 @@ data class MuestraLongitudinal (
     var otros : String,
 
     @Campo(
-        descripcion = "",
+        descripcion = "Observaciones Generales",
         posición = 23,
         sección = "ObservacionesF"
     )
@@ -256,26 +248,35 @@ data class MuestraLongitudinal (
 @Dao
 interface MuestrasLongitudinalesDao : MuestraDao <MuestraLongitudinal>  {
     @Query("SELECT id FROM muestras_longitudinales WHERE idTramo = :idTramo")
-    abstract override fun obtenerIds(idTramo: Int): List<Int>
+    abstract override fun obtenerIds(idTramo: Long): List<Long>
 
     @Query("SELECT codigo FROM muestras_longitudinales WHERE idTramo = :idTramo")
-    abstract override  fun obtenerCodigos(idTramo: Int): List<String>
+    abstract override  fun obtenerCodigos(idTramo: Long): List<String>
 
     @Query("SELECT id , codigo  FROM muestras_longitudinales WHERE idTramo = :idTramo")
-    abstract override fun cargarTodas(idTramo: Int): List<Identificador>
+    abstract override fun cargarTodas(idTramo: Long): List<Identificador>
+
+    @Query("SELECT id  FROM muestras_longitudinales WHERE idTramo = :idTramo")
+    fun obtenerIdsDeMuestrasLongitudinalesQuePertenezcanAUnTramo(idTramo: Long): List<Long>
+
+    @Query("DELETE FROM muestras_longitudinales WHERE id IN (:ids)")
+    fun eliminar (ids : List<Long>)
 
     @Query("SELECT * FROM muestras_longitudinales")
     abstract override fun cargarTodasTodas(): List<MuestraLongitudinal>
 
     @Query("SELECT * FROM muestras_longitudinales WHERE id = :id")
-    abstract override fun cargar(id: Int): MuestraLongitudinal
+    abstract override fun cargar(id: Long): MuestraLongitudinal
 
     @Insert
     abstract override fun añadir(muestra: MuestraLongitudinal)
 
     @Query("SELECT id FROM muestras_longitudinales WHERE codigo = :codigo")
-    abstract override fun findId(codigo: String): Int
+    abstract override fun findId(codigo: String): Long
 
     @Update
-    abstract override fun actualizar (muestra: MuestraLongitudinal)
+    abstract override fun modificar (muestra: MuestraLongitudinal)
+
+    @Query("DELETE FROM muestras_longitudinales WHERE id = :id")
+    override fun eliminar (id : Long)
 }

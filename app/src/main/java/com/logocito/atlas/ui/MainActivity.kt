@@ -22,6 +22,7 @@ import com.logocito.atlas.data.Muestra
 import com.logocito.atlas.data.MuestraDao
 import com.logocito.atlas.data.muestras.*
 import com.logocito.atlas.databinding.ActivityMainBinding
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileOutputStream
@@ -52,13 +53,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-            this.viewModel.exportar()
-        }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -72,7 +66,17 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_export -> {
+                this.viewModel.exportar()
+                Snackbar.make(this.binding.root, "Datos exportados", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+                true
+            }
+            //R.id.action_settings -> true
+            /*R.id.action_delete -> {
+                this.viewModel.purge()
+                true
+            }*/
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -99,26 +103,36 @@ fun encontrarCodigoDisponible (lista : List<String>) : String {
     return codigo
 }
 
+data class Elemento (
+    val id :Long,
+    var codigo: String,
+    var markedForDeath: Boolean
+)
+
 class MainActivityViewModel(application: Application) : AndroidViewModel(application){
     private var app : App
 
     private  var daoMasasAgua : MasaAguaDao
     private  var daoTramos : TramoDao
-    private  var daoMuestrasTransversales : MuestrasTransversalesDao
-    private var daoMuestrasLongitudinales : MuestrasLongitudinalesDao
-    private var daoMuestrasSubtramos: MuestrasSubtramosDao
+    var daoMuestrasTransversales : MuestrasTransversalesDao
+    var daoMuestrasLongitudinales : MuestrasLongitudinalesDao
+    var daoMuestrasSubtramos: MuestrasSubtramosDao
 
     //Primera pantalla
-    private val _codigosDeMasasDeAgua= MutableLiveData<ArrayList<String>>()
-    val codigosDeMasasDeAgua : LiveData<ArrayList<String>> get() = _codigosDeMasasDeAgua
+    /*private val _codigosDeMasasDeAgua= MutableLiveData<ArrayList<String>>()
+    val codigosDeMasasDeAgua : LiveData<ArrayList<String>> get() = _codigosDeMasasDeAgua*/
+    private val _masasDeAgua= MutableLiveData<ArrayList<Identificador>>()
+    val masasDeAgua : LiveData<ArrayList<Identificador>> get() = _masasDeAgua
 
     //Segunda pantalla
+    private var idMasaAgua : Long = 0
     private val _codigoDeMasaAgua= MutableLiveData<String>()
     val codigoDeMasaAgua : LiveData<String> get() = _codigoDeMasaAgua
-    private val _codigosDeTramos= MutableLiveData<ArrayList<String>>()
-    val codigosDeTramos : LiveData<ArrayList<String>> get() = _codigosDeTramos
+    private val _tramos= MutableLiveData<ArrayList<Identificador>>()
+    val tramos : LiveData<ArrayList<Identificador>> get() = _tramos
 
     //Tercera pantalla
+    private var idTramo : Long = 0
     private val _codigoDeTramo= MutableLiveData<String>()
     val codigoDeTramo : LiveData<String> get() = _codigoDeTramo
     private val _muestrasLongitudinales= MutableLiveData<ArrayList<Identificador>>()
@@ -129,46 +143,52 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val muestrasSubtramos : LiveData<ArrayList<Identificador>> get() = _muestrasSubtramos
 
     //Cuarta pantalla: Transversal
-
     private val _muestraTransversal= MutableLiveData<MuestraTransversal>()
     val muestraTransversal : LiveData<MuestraTransversal> get() = _muestraTransversal
-
-    private val _codigoDeMuestraTransversal= MutableLiveData<String>()
-    val codigoDeMuestraTransversal : LiveData<String> get() = _codigoDeMuestraTransversal
+    /*private val _codigoDeMuestraTransversal= MutableLiveData<String>()
+    val codigoDeMuestraTransversal : LiveData<String> get() = _codigoDeMuestraTransversal*/
 
     //Cuarta pantalla: Longitudinal
     private val _muestraLongitudinal= MutableLiveData<MuestraLongitudinal>()
     val muestraLongitudinal : LiveData<MuestraLongitudinal> get() = _muestraLongitudinal
+    /*private val _codigoDeMuestraLongitudinal= MutableLiveData<String>()
+    val codigoDeMuestraLongitudinal : LiveData<String> get() = _codigoDeMuestraLongitudinal*/
 
     //Cuarta pantalla: Subtramo
     private val _muestraSubtramo= MutableLiveData<MuestraSubtramo>()
     val muestraSubtramo : LiveData<MuestraSubtramo> get() = _muestraSubtramo
+    /*private val _codigoDeMuestraSubtramo= MutableLiveData<String>()
+    val codigoDeMuestraSubtramo : LiveData<String> get() = _codigoDeMuestraSubtramo*/
 
     init {
         this.app = this.getApplication<App>()
         this.daoMasasAgua = app.database.masaAguaDao()
-        this._codigosDeMasasDeAgua.postValue(this.daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String>)
+        //this._codigosDeMasasDeAgua.postValue(this.daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String>)
+        this.cargarMasasAgua()
         this.daoTramos = app.database.tramoDao()
         this.daoMuestrasTransversales = app.database.muestrasTransversalesDao()
         this.daoMuestrasLongitudinales = app.database.muestrasLongitudinalesDao()
         this.daoMuestrasSubtramos = app.database.muestrasSubtramosDao()
     }
 
-    fun añadirMasaAgua (codigo: String){
+    fun añadirMasaAgua (codigo: String) : Long{
         val nuevaMasaAgua = MasaAgua(
             0,
             codigo,
         )
-        this.daoMasasAgua.añadirMasaAgua(nuevaMasaAgua)
-        this._codigosDeMasasDeAgua.value = daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String> /* = java.util.ArrayList<kotlin.String> */
+        val id = this.daoMasasAgua.añadirMasaAgua(nuevaMasaAgua)
+        this.cargarMasasAgua()
+        return id
     }
-    fun añadirMasaAgua (): String{
-        val codigo = encontrarCodigoDisponible(this.codigosDeMasasDeAgua.value!!)
-        this.añadirMasaAgua(codigo)
-        return codigo
+    fun añadirMasaAgua (): Long{
+        //val codigo = encontrarCodigoDisponible(this.codigosDeMasasDeAgua.value!!)
+        val codigo = "Nueva"
+        val id = this.añadirMasaAgua(codigo)
+        return id
     }
     fun añadirTramo() : String{
-        val codigo = encontrarCodigoDisponible(this.codigosDeTramos.value!!)
+        //val codigo = encontrarCodigoDisponible(this.tramos.value!!)
+        val codigo = "Nuevo"
         this.añadirTramo(this.codigoDeMasaAgua.value!!,codigo)
         return codigo
     }
@@ -176,7 +196,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         val masaAgua = daoMasasAgua.cargar(codigoMasaAgua)
         val tramo = Tramo(0,codigoTramo,masaAgua.id)
         this.daoTramos.crearTramo(tramo)
-        this._codigosDeTramos.value = daoTramos.obtenerCodigosTramos(masaAgua.id) as ArrayList<String>
+        this._tramos.value = daoTramos.cargarTodos(masaAgua.id) as ArrayList<Identificador>
     }
     fun añadirMuestraTransversal() : String{
         //val codigo = encontrarCodigoDisponible(this.codigosDeMuestrasTransversales.value!!)
@@ -185,11 +205,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         return codigo
     }
     fun añadirMuestraTransversal(codigoMuestraTransversal : String){
-        val codigoTramo = this.codigoDeTramo.value!!
-        val idTramo = daoTramos.findId(codigoTramo)
         val muestraTransversal = MuestraTransversal(
             id=0,
-            idTramo = idTramo,
+            idTramo = this.idTramo,
             codigo = codigoMuestraTransversal,
             longitud = 0,
             coordenadaX = 0,
@@ -277,7 +295,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             ralentizadores = false,
         )
         this.daoMuestrasTransversales.añadir(muestraTransversal)
-        this.cargarTramo(codigoTramo)
+        this.cargarTramo(this.idTramo)
     }
     fun añadirMuestraLongitudinal() : String{
         //val codigo = encontrarCodigoDisponible(this.codigosDeMuestrasLongitudinales.value!!)
@@ -286,11 +304,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         return codigo
     }
     fun añadirMuestraLongitudinal(codigoMuestraLongitudinal : String){
-        val codigoTramo = this.codigoDeTramo.value!!
-        val idTramo = daoTramos.findId(codigoTramo)
         val muestraLongitudinal = MuestraLongitudinal(
             id=0,
-            idTramo = idTramo,
+            idTramo = this.idTramo,
             codigo = codigoMuestraLongitudinal,
             ubicacionObra = UbicacionObra.MARGEN_DEL_RIO,
             margen = Margen.IZQUIERDA,
@@ -309,7 +325,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             taludExterior = "",
             distanciaMediaCauce = "",
             otros = "",
-            imgDimensiones = "",
             coorInX = "",
             coorInY = "",
             coorFnX = "",
@@ -317,7 +332,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             utm = Utm.TREINTA,
         )
         this.daoMuestrasLongitudinales.añadir(muestraLongitudinal)
-        this.cargarTramo(codigoTramo)
+        this.cargarTramo(this.idTramo)
     }
     fun añadirMuestraSubtramo() : String{
         //val codigo = encontrarCodigoDisponible(this.codigosDeMuestrasSubtramos.value!!)
@@ -326,11 +341,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         return codigo
     }
     fun añadirMuestraSubtramo(codigoMuestraSubtramo : String){
-        val codigoTramo = this.codigoDeTramo.value!!
-        val idTramo = daoTramos.findId(codigoTramo)
         val muestraSubtramo = MuestraSubtramo(
             id=0,
-            idTramo = idTramo,
+            idTramo = this.idTramo,
             codigo = codigoMuestraSubtramo,
             inicioX = "",
             finX = "",
@@ -411,11 +424,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             miGradoAfeccionAloctona = MiGradoAfeccionAloctona.BAJA,
             mdGradoAfeccionAloctona = MdGradoAfeccionAloctona.BAJA,
             afeccionObs = "",
-            acelerada = "",
-            depo = "",
         )
         this.daoMuestrasSubtramos.añadir(muestraSubtramo)
-        this.cargarTramo(codigoTramo)
+        this.cargarTramo(this.idTramo)
     }
     fun cambiarCodigoMasaAgua(codigoNuevo : String){
         val codigoAnterior = this.codigoDeMasaAgua.value
@@ -431,47 +442,75 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 this._codigoDeMasaAgua.postValue(codigoNuevo)
                 //this.cargarMasaAgua(codigoNuevo)
                 //daoMasasAgua.eliminar(masaAguaAnterior)
-                this._codigosDeMasasDeAgua.postValue(this.daoMasasAgua.obtenerCodigosMasasAgua() as ArrayList<String>)
+                this.cargarMasasAgua()
 
             }
         }
     }
-    fun cambiarCodigoTramo(codigoNuevo : String){
-        val codigoAnterior = this.codigoDeTramo.value
-        if(codigoAnterior != null) {
-            if (codigoNuevo != codigoAnterior) {
-                val tramoAnterior = daoTramos.cargar(codigoAnterior)
-                val tramoNuevo =tramoAnterior.copy(
-                    codigo = codigoNuevo,
-                )
-                this.daoTramos.modificar(tramoNuevo)
-                this._codigoDeTramo.postValue(codigoNuevo)
-                val idMasaAgua = daoMasasAgua.findId(this.codigoDeMasaAgua.value!!)
-                this._codigosDeTramos.postValue(this.daoTramos.obtenerCodigosTramos(idMasaAgua) as ArrayList<String>)
 
-            }
+    fun cambiarCodigoTransversal(id : Long, codigoNuevo : String){
+        val muestraTransversal = this.muestraTransversal.value!!
+        muestraTransversal.codigo = codigoNuevo
+        this.daoMuestrasTransversales.modificar(muestraTransversal)
+        this.cargarMuestraTransversal(id)
+    }
+
+    fun cambiarCodigoLongitudinal(id : Long, codigoNuevo : String){
+        val muestraLongitudinal = this.muestraLongitudinal.value!!
+        muestraLongitudinal.codigo = codigoNuevo
+        this.daoMuestrasLongitudinales.modificar(muestraLongitudinal)
+        this.cargarMuestraLongitudinal(id)
+    }
+
+    fun cambiarCodigoSubtramo(id : Long, codigoNuevo : String){
+        val muestraSubtramo = this.muestraSubtramo.value!!
+        muestraSubtramo.codigo = codigoNuevo
+        this.daoMuestrasSubtramos.modificar(muestraSubtramo)
+        this.cargarMuestraSubtramo(id)
+    }
+
+    fun cambiarCodigoTramo(codigoNuevo : String){
+        val codigoAnterior = this.codigoDeTramo.value!!
+        if (codigoNuevo != codigoAnterior) {
+            val tramo = daoTramos.cargar(this.idTramo)
+            tramo.codigo = codigoNuevo
+            this.daoTramos.modificar(tramo)
+            this._codigoDeTramo.postValue(codigoNuevo)
+            val idMasaAgua = daoMasasAgua.findId(this.codigoDeMasaAgua.value!!)
+            this._tramos.postValue(this.daoTramos.cargarTodos(idMasaAgua) as ArrayList<Identificador>)
         }
     }
 
     fun cambiarMuestraLongitudinal(muestra : MuestraLongitudinal){
-        this.daoMuestrasLongitudinales.actualizar(muestra)
+        this.daoMuestrasLongitudinales.modificar(muestra)
     }
 
     fun cambiarMuestraTransversal(muestra : MuestraTransversal){
-        this.daoMuestrasTransversales.actualizar(muestra)
+        this.daoMuestrasTransversales.modificar(muestra)
     }
 
     fun cambiarMuestraSubtramo(muestra : MuestraSubtramo){
-        this.daoMuestrasSubtramos.actualizar(muestra)
+        this.daoMuestrasSubtramos.modificar(muestra)
     }
 
-    fun cargarMasaAgua(codigo : String,){
-        val idMasaAgua = daoMasasAgua.findId(codigo)
+    fun cargarMasaAgua(idMasaAgua: Long){
+        this.idMasaAgua = idMasaAgua
+        val codigo = this.daoMasasAgua.obtenerCodigo(idMasaAgua)
         this._codigoDeMasaAgua.postValue(codigo)
-        this._codigosDeTramos.postValue(daoTramos.obtenerCodigosTramos(idMasaAgua) as ArrayList<String> /* = java.util.ArrayList<kotlin.String> */)
+        this._tramos.postValue(daoTramos.cargarTodos(idMasaAgua) as ArrayList<Identificador> /* = java.util.ArrayList<kotlin.String> */)
     }
-    fun cargarTramo(codigo : String,){
-        val idTramo = daoTramos.findId(codigo)
+
+    fun cargarMasasAgua(){
+        this._masasDeAgua.postValue(
+            this.daoMasasAgua.cargarTodas()
+            as ArrayList<Identificador> /* = java.util.ArrayList<kotlin.Pair<kotlin.String, kotlin.Boolean>> */
+        )
+
+    }
+
+    fun cargarTramo(idTramo : Long){
+        this.idTramo = idTramo
+        val codigo = this.daoTramos.obtenerCodigo(idTramo)
         this._codigoDeTramo.postValue(codigo)
         val muestrasTransversales = daoMuestrasTransversales.cargarTodas(idTramo) as ArrayList<Identificador>
         this._muestrasTransversales.postValue(muestrasTransversales)
@@ -481,17 +520,63 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         this._muestrasSubtramos.postValue(muestrasSubtramos)
     }
 
-    fun cargarMuestraLongitudinal (id : Int){
+    fun cargarTramo(){
+        this.cargarTramo(this.idTramo)
+    }
+
+    fun cargarMuestraLongitudinal (id : Long){
         val muestraLongitudinal = this.daoMuestrasLongitudinales.cargar(id)
         this._muestraLongitudinal.postValue(muestraLongitudinal)
     }
-    fun cargarMuestraTransversal (id : Int) {
+    fun cargarMuestraTransversal (id : Long) {
         val muestraTransversal = this.daoMuestrasTransversales.cargar(id)
         this._muestraTransversal.postValue(muestraTransversal)
     }
-    fun cargarMuestraSubtramo (id : Int){
+    fun cargarMuestraSubtramo (id : Long){
         val muestraSubtramo = this.daoMuestrasSubtramos.cargar(id)
         this._muestraSubtramo.postValue(muestraSubtramo)
+    }
+
+    fun eliminarMasaAgua (id: Long){
+        val tramos = this.daoTramos.obtenerIdsDeTramosQuePertenezcanAUnaMasaDeAgua(id)
+        this.eliminarTramos(tramos)
+        this.daoMasasAgua.eliminar(id)
+        this.cargarMasasAgua()
+    }
+
+    inline fun <reified T : Muestra> eliminarMuestra(id : Long){
+        val dao = when (T :: class){
+            MuestraLongitudinal :: class -> this.daoMuestrasLongitudinales
+            MuestraTransversal :: class -> this.daoMuestrasTransversales
+            MuestraSubtramo :: class -> this.daoMuestrasSubtramos
+            else -> {
+                TODO("Amor")}
+        }
+        dao.eliminar(id)
+        this.cargarTramo()
+    }
+
+    fun eliminarTramo (id: Long){
+        val muestrasLongitudinales = this.daoMuestrasLongitudinales.obtenerIdsDeMuestrasLongitudinalesQuePertenezcanAUnTramo(id)
+        this.daoMuestrasLongitudinales.eliminar(muestrasLongitudinales)
+        val muestrasTransversales = this.daoMuestrasTransversales.obtenerIdsDeMuestrasTransversalesQuePertenezcanAUnTramo(id)
+        this.daoMuestrasTransversales.eliminar(muestrasTransversales)
+        val muestrasSubtramos = this.daoMuestrasSubtramos.obtenerIdsDeMuestrasSubtramosQuePertenezcanAUnTramo(id)
+        this.daoMuestrasSubtramos.eliminar(muestrasSubtramos)
+        this.daoTramos.eliminar(id)
+        this.cargarMasaAgua(this.idMasaAgua)
+    }
+
+    fun eliminarTramos (ids: List<Long>){
+        for (tramo in ids){
+            val muestrasLongitudinales = this.daoMuestrasLongitudinales.obtenerIdsDeMuestrasLongitudinalesQuePertenezcanAUnTramo(tramo)
+            this.daoMuestrasLongitudinales.eliminar(muestrasLongitudinales)
+            val muestrasTransversales = this.daoMuestrasTransversales.obtenerIdsDeMuestrasTransversalesQuePertenezcanAUnTramo(tramo)
+            this.daoMuestrasTransversales.eliminar(muestrasTransversales)
+            val muestrasSubtramos = this.daoMuestrasSubtramos.obtenerIdsDeMuestrasSubtramosQuePertenezcanAUnTramo(tramo)
+            this.daoMuestrasSubtramos.eliminar(muestrasSubtramos)
+        }
+        this.daoTramos.eliminar(ids)
     }
 
     fun exportar () {
@@ -520,10 +605,20 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         var columnIndex = 3
         for ((seccion, subcampos) in campos){
             cabeceraSecciones.createCell(columnIndex).setCellValue(seccion)
+            val cellRangeAddress = CellRangeAddress(
+                0,
+                0,
+                columnIndex,
+                columnIndex + 1,
+            )
             for (campo in subcampos){
                 val campoData = campo.findAnnotation<Campo>()
                 cabeceraCampos.createCell(columnIndex).setCellValue(campoData?.descripcion ?: campo.name)
                 columnIndex += 1
+            }
+            cellRangeAddress.lastColumn = columnIndex -1
+            if(cellRangeAddress.lastColumn > cellRangeAddress.firstColumn){
+                sheet.addMergedRegion(cellRangeAddress)
             }
         }
 

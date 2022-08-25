@@ -5,14 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TableRow
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.logocito.atlas.R
-import com.logocito.atlas.data.MasaAgua
 import com.logocito.atlas.databinding.FragmentTramosBinding
 
 /**
@@ -45,20 +45,30 @@ class TramosFragment : Fragment() {
             binding.editMasaAguaCode.setText(this.viewModel.codigoDeMasaAgua.value)
         })
 
-        this.viewModel.codigosDeTramos.observe(
+        this.viewModel.tramos.observe(
             this.viewLifecycleOwner,
             Observer {
-                var lista = binding.lista.getChildAt(0) as LinearLayout
-                lista.removeAllViews()
-                for (codigoDeTramo in it){
-                    var prueba1 = android.widget.TextView(this.binding.lista.context)
+                this.binding.tabla.removeAllViews()
+                for (identificador in it){
+                    val fila = TableRow(this.binding.tabla.context)
+                    val codigoDeTramo = identificador.codigo
+                    val prueba1 = android.widget.TextView(fila.context)
                     prueba1.text = codigoDeTramo
+                    prueba1.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body2)
+                    prueba1.textSize = 20F
                     prueba1.setOnClickListener {
                         val navController = findNavController()
-                        val bundle = bundleOf("codigoDeTramo" to codigoDeTramo)
+                        val bundle = bundleOf("tramo" to identificador.id)
                         navController.navigate(R.id.action_TramosFragment_to_MuestrasFragment, bundle)
                     }
-                    lista.addView(prueba1)
+                    fila.addView(prueba1)
+                    val botonBorrar = Button(fila.context)
+                    botonBorrar.text = "Borrar"
+                    botonBorrar.setOnClickListener {
+                        this.viewModel.eliminarTramo(identificador.id)
+                    }
+                    fila.addView(botonBorrar)
+                    this.binding.tabla.addView(fila)
                 }
             },
         )
@@ -78,12 +88,14 @@ class TramosFragment : Fragment() {
         }
 
         //Load Data
-        this.viewModel.cargarMasaAgua(arguments?.getString("masaDeAgua")!!)
+        this.viewModel.cargarMasaAgua(arguments?.getLong("masaDeAgua")!!)
     }
 
     override fun onPause() {
         super.onPause()
+        this.viewModel.cambiarCodigoMasaAgua(this.binding.editMasaAguaCode.text.toString())
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

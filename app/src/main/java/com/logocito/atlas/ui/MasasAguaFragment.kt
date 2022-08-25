@@ -5,14 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.TableRow
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.logocito.atlas.R
-import com.logocito.atlas.data.MasaAgua
 import com.logocito.atlas.databinding.FragmentMasasAguaBinding
 
 /**
@@ -40,21 +41,33 @@ class MasasAguaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.viewModel.codigosDeMasasDeAgua.observe(this.viewLifecycleOwner, Observer {
-
-            var lista = binding.lista.getChildAt(0) as LinearLayout
-            lista.removeAllViews()
-            for (codigo_de_masa_de_agua in it){
-                var prueba1 = android.widget.TextView(this.binding.lista.context)
+        this.viewModel.masasDeAgua.observe(this.viewLifecycleOwner, Observer {
+            this.binding.tabla.removeAllViews()
+            for (identificador in it){
+                val codigo_de_masa_de_agua = identificador.codigo
+                val fila = TableRow(this.binding.tabla.context)
+                var prueba1 = android.widget.TextView(fila.context)
+                //FIXME: ID
                 prueba1.text = codigo_de_masa_de_agua
+                prueba1.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body2)
+                prueba1.textSize = 20F
                 prueba1.setOnClickListener {
-                    Snackbar.make(view, "Cargando datos", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
+                    /*Snackbar.make(view, "Cargando datos", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()*/
                     val navController = findNavController()
-                    val bundle = bundleOf("masaDeAgua" to codigo_de_masa_de_agua)
+                    val bundle = bundleOf("masaDeAgua" to identificador.id)
                     navController.navigate(R.id.action_MasasAguaFragment_to_TramosFragment, bundle)
                 }
-                lista.addView(prueba1)
+                //val onSwipeListener = OnSwipeListener(codigo_de_masa_de_agua)
+                //prueba1.setOnTouchListener(onSwipeListener)
+                fila.addView(prueba1)
+                val botonBorrar = Button(fila.context)
+                botonBorrar.text = "Borrar"
+                botonBorrar.setOnClickListener {
+                    this.viewModel.eliminarMasaAgua(identificador.id)
+                }
+                fila.addView(botonBorrar)
+                this.binding.tabla.addView(fila)
             }
 
 
@@ -62,13 +75,16 @@ class MasasAguaFragment : Fragment() {
 
 
         binding.btNuevaMasa.setOnClickListener {
-            val codigo = this.viewModel.añadirMasaAgua()
+            val id = this.viewModel.añadirMasaAgua()
+            /*
             val navController = findNavController()
-            val bundle = bundleOf("masaDeAgua" to codigo)
+            val bundle = bundleOf("masaDeAgua" to id)
             navController.navigate(
                 R.id.action_MasasAguaFragment_to_TramosFragment,
                 bundle,
             )
+
+             */
         }
 
 

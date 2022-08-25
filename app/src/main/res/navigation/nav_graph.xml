@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/MasasAguaFragment">
+    app:startDestination="@id/blankFragment">
 
     <fragment
         android:id="@+id/MasasAguaFragment"
@@ -24,7 +24,7 @@
 
         <argument
             android:name="masaDeAgua"
-            app:argType="string"
+            app:argType="long"
             android:defaultValue="@null"  />
 
         <action
@@ -40,8 +40,8 @@
         android:label="Muestras"
         tools:layout="@layout/fragment_muestras">
         <argument
-            android:name="codigoDeTramo"
-            app:argType="string"
+            android:name="tramo"
+            app:argType="long"
             android:defaultValue="@null"  />
 
         <action
@@ -64,7 +64,7 @@
         tools:layout="@layout/fragment_muestra_transversal">
         <argument
             android:name="id"
-            app:argType="integer"
+            app:argType="long"
             android:defaultValue="@null"  />
 
     </fragment>
@@ -75,7 +75,7 @@
         tools:layout="@layout/fragment_muestra_subtramo">
         <argument
             android:name="id"
-            app:argType="integer"
+            app:argType="long"
             android:defaultValue="@null"  />
 
     </fragment>
@@ -86,9 +86,22 @@
         tools:layout="@layout/fragment_muestra_longitudinal">
         <argument
             android:name="id"
-            app:argType="integer"
+            app:argType="long"
             android:defaultValue="@null"  />
 
     </fragment>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.logocito.atlas.ui.PortadaFragment"
+        android:label=""
+        tools:layout="@layout/fragment_portada" >
+        <action
+            android:id="@+id/action_blankFragment_to_MasasAguaFragment"
+            app:destination="@id/MasasAguaFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/portadaActivity"
+        android:name="com.logocito.atlas.ui.PortadaActivity"
+        android:label="PortadaActivity" />
 
 </navigation>

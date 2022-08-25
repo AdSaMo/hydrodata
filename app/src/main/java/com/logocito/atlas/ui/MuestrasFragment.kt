@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.os.bundleOf
@@ -13,6 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.logocito.atlas.R
 import com.logocito.atlas.data.Identificador
+import com.logocito.atlas.data.Muestra
+import com.logocito.atlas.data.MuestraDao
+import com.logocito.atlas.data.muestras.MuestraLongitudinal
+import com.logocito.atlas.data.muestras.MuestraSubtramo
+import com.logocito.atlas.data.muestras.MuestraTransversal
 import com.logocito.atlas.databinding.FragmentMuestrasBinding
 
 
@@ -38,7 +44,7 @@ class MuestrasFragment : Fragment() {
 
     }
 
-    fun recargarParteLista (muestras : List<Identificador>, tipo : String, navigationAction : Int){
+    private inline fun < reified T : Muestra> recargarParteLista (muestras : List<Identificador>, tipo : String, navigationAction : Int){
         for (muestra in muestras){
             val fila = TableRow(this.binding.tabla.context)
             fila.setOnClickListener {
@@ -48,10 +54,18 @@ class MuestrasFragment : Fragment() {
             }
             val prueba1 = TextView(fila.context)
             prueba1.text = muestra.codigo
+            prueba1.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body2)
+            prueba1.textSize = 20F
             fila.addView(prueba1)
             val tipoView = TextView(fila.context)
             tipoView.text = tipo
             fila.addView(tipoView)
+            val botonBorrar = Button(fila.context)
+            botonBorrar.text = "Borrar"
+            botonBorrar.setOnClickListener {
+                this.viewModel.eliminarMuestra<T>(muestra.id)
+            }
+            fila.addView(botonBorrar)
             this.binding.tabla.addView(fila)
 
         }
@@ -60,7 +74,7 @@ class MuestrasFragment : Fragment() {
         this.binding.tabla.removeAllViews()
 
         this.viewModel.muestrasLongitudinales.value?.let{
-            this.recargarParteLista(
+            this.recargarParteLista<MuestraLongitudinal>(
                 it,
                 "Longitudinal",
                 R.id.action_MuestrasFragment_to_MuestraLongitudinalFragment,
@@ -68,7 +82,7 @@ class MuestrasFragment : Fragment() {
         }
 
         this.viewModel.muestrasSubtramos.value?.let{
-            this.recargarParteLista(
+            this.recargarParteLista<MuestraSubtramo>(
                 it,
                 "Subtramo",
                 R.id.action_MuestrasFragment_to_MuestraSubtramoFragment,
@@ -76,7 +90,7 @@ class MuestrasFragment : Fragment() {
         }
 
         this.viewModel.muestrasTransversales.value?.let{
-            this.recargarParteLista(
+            this.recargarParteLista<MuestraTransversal>(
                 it,
                 "Transversal",
                 R.id.action_MuestrasFragment_to_MuestraTransversalFragment,
@@ -130,7 +144,12 @@ class MuestrasFragment : Fragment() {
             true
         }
         //Load Data
-        this.viewModel.cargarTramo(arguments?.getString("codigoDeTramo")!!)
+        this.viewModel.cargarTramo(arguments?.getLong("tramo")!!)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.viewModel.cambiarCodigoTramo(this.binding.editTramoCode.text.toString())
     }
 
     override fun onDestroyView() {

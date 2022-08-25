@@ -45,12 +45,21 @@ class MuestraSubtramoFragment : Muestra<MuestraSubtramo>() {
                 this.formularioLoad(it, view)
             }
         )
+        this.binding.codigo.setOnEditorActionListener { textView, i, keyEvent ->
+            val codigoNuevo = textView.text.toString()
+            this.viewModel.cambiarCodigoSubtramo(
+                this.dbid,
+                codigoNuevo,
+            )
+            true
+        }
         this.viewModel.cargarMuestraSubtramo(this.dbid)
     }
 
     override fun onPause() {
         super.onPause()
         val muestraEditada = this.formularioSave(this.muestra, this.binding.root)
+        muestraEditada.codigo = this.binding.codigo.text.toString()
         this.viewModel.cambiarMuestraSubtramo(muestraEditada)
     }
 

@@ -339,9 +339,9 @@ enum class MdGradoAfeccionAloctona{
 )
 data class MuestraSubtramo (
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
-    override val codigo : String,
-    override val idTramo:Int,
+    val id : Long,
+    override var codigo : String,
+    override val idTramo:Long,
 
     @Campo(
         descripcion = "Coordenada inicio x",
@@ -529,15 +529,6 @@ data class MuestraSubtramo (
     var otra : String,
 
     @Campo(
-        descripcion = "Anotaciones generales extra para depósitos emergenetes",
-        posición = 29,
-        sección = "DepositosEmergentes",
-        imagen = R.drawable.formas_depositos,
-    )
-    var depo : String,
-
-
-    @Campo(
         descripcion = "Barra Marginal",
         posición = 30,
         sección = "DepositosEmergentes"
@@ -606,14 +597,6 @@ data class MuestraSubtramo (
         sección = "MovilidadSedimentos"
     )
     var movilidadSedimentos: MovilidadSedimentos,
-
-    @Campo(
-        descripcion = "Anotaciones extra dinámica acelerada",
-        posición = 40,
-        sección = "SintomasDinamicaAcelerada",
-        imagen = R.drawable.acelerada,
-    )
-    var acelerada : String,
 
     @Campo(
         descripcion = "¿Hay síntomas?",
@@ -914,26 +897,35 @@ data class MuestraSubtramo (
 @Dao
 interface MuestrasSubtramosDao : MuestraDao<MuestraSubtramo> {
     @Query("SELECT id FROM muestras_subtramos WHERE idTramo = :idTramo")
-    abstract override fun obtenerIds(idTramo: Int): List<Int>
+    abstract override fun obtenerIds(idTramo: Long): List<Long>
 
     @Query("SELECT codigo FROM muestras_subtramos WHERE idTramo = :idTramo")
-    abstract override fun obtenerCodigos(idTramo: Int): List<String>
+    abstract override fun obtenerCodigos(idTramo: Long): List<String>
 
     @Insert
     abstract override fun añadir(muestra: MuestraSubtramo)
 
     @Query("SELECT id FROM muestras_subtramos WHERE codigo = :codigo")
-    abstract override fun findId(codigo: String): Int
+    abstract override fun findId(codigo: String): Long
 
     @Update
-    abstract override fun actualizar (muestra: MuestraSubtramo)
+    abstract override fun modificar (muestra: MuestraSubtramo)
 
     @Query("SELECT * FROM muestras_subtramos WHERE id = :id")
-    abstract override fun cargar(id: Int): MuestraSubtramo
+    abstract override fun cargar(id: Long): MuestraSubtramo
 
     @Query("SELECT id , codigo  FROM muestras_subtramos WHERE idTramo = :idTramo")
-    abstract override fun cargarTodas(idTramo: Int): List<Identificador>
+    abstract override fun cargarTodas(idTramo: Long): List<Identificador>
 
     @Query("SELECT * FROM muestras_subtramos")
     abstract override fun cargarTodasTodas(): List<MuestraSubtramo>
+
+    @Query("SELECT id  FROM muestras_subtramos WHERE idTramo = :idTramo")
+    fun obtenerIdsDeMuestrasSubtramosQuePertenezcanAUnTramo(idTramo: Long): List<Long>
+
+    @Query("DELETE FROM muestras_subtramos WHERE id IN (:ids)")
+    fun eliminar (ids : List<Long>)
+
+    @Query("DELETE FROM muestras_subtramos WHERE id = :id")
+    override fun eliminar (id : Long)
 }

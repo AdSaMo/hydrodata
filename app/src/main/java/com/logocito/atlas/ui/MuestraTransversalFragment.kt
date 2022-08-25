@@ -49,12 +49,21 @@ class MuestraTransversalFragment : Muestra<MuestraTransversal>() {
                 this.formularioLoad(it, view)
             }
         )
+        this.binding.codigo.setOnEditorActionListener { textView, i, keyEvent ->
+            val codigoNuevo = textView.text.toString()
+            this.viewModel.cambiarCodigoTransversal(
+                this.dbid,
+                codigoNuevo,
+            )
+            true
+        }
         this.viewModel.cargarMuestraTransversal(this.dbid)
     }
 
     override fun onPause() {
         super.onPause()
         val muestraEditada = this.formularioSave(this.muestra, this.binding.root)
+        muestraEditada.codigo = this.binding.codigo.text.toString()
         this.viewModel.cambiarMuestraTransversal(muestraEditada)
     }
 

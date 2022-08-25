@@ -239,9 +239,9 @@ enum class DsDiscObs{
 )
 data class MuestraTransversal (
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
-    override val codigo : String,
-    override val idTramo:Int,
+    val id : Long,
+    override var codigo : String,
+    override val idTramo:Long,
     var longitud : Int,
     var coordenadaX : Long,
     var coordenadaY : Long,
@@ -827,26 +827,35 @@ data class MuestraTransversal (
 interface MuestrasTransversalesDao : MuestraDao<MuestraTransversal> {
 
     @Query("SELECT id FROM muestras_transversales WHERE idTramo = :idTramo")
-    abstract override fun obtenerIds(idTramo: Int): List<Int>
+    abstract override fun obtenerIds(idTramo: Long): List<Long>
 
     @Query("SELECT codigo FROM muestras_transversales WHERE idTramo = :idTramo")
-    abstract override fun obtenerCodigos(idTramo: Int) : List<String>
+    abstract override fun obtenerCodigos(idTramo: Long) : List<String>
 
     @Insert
     abstract override fun añadir(muestra: MuestraTransversal)
 
     @Query ("SELECT id FROM muestras_transversales WHERE codigo = :codigo")
-    abstract override fun findId (codigo:String) : Int
+    abstract override fun findId (codigo:String) : Long
 
     @Update
-    abstract override fun actualizar (muestra: MuestraTransversal)
+    abstract override fun modificar (muestra: MuestraTransversal)
 
     @Query("SELECT id , codigo  FROM muestras_transversales WHERE idTramo = :idTramo")
-    abstract override fun cargarTodas(idTramo: Int): List<Identificador>
+    abstract override fun cargarTodas(idTramo: Long): List<Identificador>
 
     @Query("SELECT * FROM muestras_transversales")
     abstract override fun cargarTodasTodas(): List<MuestraTransversal>
 
     @Query("SELECT * FROM muestras_transversales WHERE id = :id")
-    abstract override fun cargar(id: Int): MuestraTransversal
+    abstract override fun cargar(id: Long): MuestraTransversal
+
+    @Query("SELECT id  FROM muestras_transversales WHERE idTramo = :idTramo")
+    fun obtenerIdsDeMuestrasTransversalesQuePertenezcanAUnTramo(idTramo: Long): List<Long>
+
+    @Query("DELETE FROM muestras_transversales WHERE id IN (:ids)")
+    fun eliminar (ids : List<Long>)
+
+    @Query("DELETE FROM muestras_transversales WHERE id = :id")
+    override fun eliminar (id : Long)
 }

@@ -45,14 +45,14 @@ inline fun <ClaseModelo : Any> sortCampos (dataClass : KClass<ClaseModelo>) : Li
 
 abstract class Muestra <ClaseModelo : Any> : Fragment() {
     //private lateinit var data : ClaseModelo
-    protected var dbid: Int = -1
+    protected var dbid: Long = -1
     private val formularioViews = HashMap<String, Int>()
     protected val viewModel : MainActivityViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            this.dbid = it.getInt(ARG_PARAM1)
+            this.dbid = it.getLong(ARG_PARAM1)
         }
     }
 
@@ -64,8 +64,8 @@ abstract class Muestra <ClaseModelo : Any> : Fragment() {
             println(seccionConstraintLayoutIdentifier)
             val seccionConstraintLayoutId = lista.context.resources.getIdentifier(seccionConstraintLayoutIdentifier, "id",lista.context.packageName)
             val seccionConstraintLayout = lista.findViewById<ConstraintLayout>(seccionConstraintLayoutId)
-            val seccionHeader = seccionConstraintLayout.getChildAt(0)
-            var lastView: View = seccionHeader
+            val lastChild = seccionConstraintLayout.getChildAt(seccionConstraintLayout.childCount -1)
+            var lastView: View = lastChild
             for (campo in campos) {
                 val propiedad = campo
                 val campoData = propiedad.findAnnotation<Campo>()
@@ -130,7 +130,7 @@ abstract class Muestra <ClaseModelo : Any> : Fragment() {
                 }
             }
             constraints.connect(
-                lastView!!.id,
+                lastView.id,
                 ConstraintSet.BOTTOM,
                 ConstraintSet.PARENT_ID,
                 ConstraintSet.BOTTOM
