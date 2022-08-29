@@ -293,6 +293,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             prePresas = false,
             rampasPiedras = false,
             ralentizadores = false,
+            fechaTransversal = "",
+            horaTransversal = "",
         )
         this.daoMuestrasTransversales.añadir(muestraTransversal)
         this.cargarTramo(this.idTramo)
@@ -330,6 +332,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             coorFnX = "",
             coorFnY = "",
             utm = Utm.TREINTA,
+            fechaLongitudinal = "",
+            horaLongitudinal = "",
         )
         this.daoMuestrasLongitudinales.añadir(muestraLongitudinal)
         this.cargarTramo(this.idTramo)
@@ -424,6 +428,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             miGradoAfeccionAloctona = MiGradoAfeccionAloctona.BAJA,
             mdGradoAfeccionAloctona = MdGradoAfeccionAloctona.BAJA,
             afeccionObs = "",
+            fechaSubtramo = "",
+            horaSubtramo = "",
         )
         this.daoMuestrasSubtramos.añadir(muestraSubtramo)
         this.cargarTramo(this.idTramo)

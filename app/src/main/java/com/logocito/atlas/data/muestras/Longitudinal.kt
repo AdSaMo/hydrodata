@@ -56,13 +56,25 @@ enum class Revestimiento {
     ESCOLLERA,
     GAVIONES,
     MAMPOSTERIA,
+    @Opcion(
+        descripcion = "Sin revestir"
+    )
     SIN_REVESTIR,
     OTROS,
 }
 
 enum class AnchoCoronacion {
+    @Opcion(
+        descripcion = "<1"
+    )
     MENORQUEUNO,
+    @Opcion(
+        descripcion = "1-3"
+    )
     ENTREUNOYTRES,
+    @Opcion(
+        descripcion = ">3"
+    )
     MAYORQUETRES
 }
 
@@ -91,155 +103,169 @@ data class MuestraLongitudinal (
     override val idTramo:Long,
 
     @Campo(
-        descripcion = "Huso UTM",
+        descripcion = "Fecha",
         posición = 0,
+        sección = "General"
+    )
+    var fechaLongitudinal : String,
+
+    @Campo(
+        descripcion = "Hora",
+        posición = 2,
+        sección = "General"
+    )
+    var horaLongitudinal : String,
+
+    @Campo(
+        descripcion = "Huso UTM",
+        posición = 4,
         sección = "General"
     )
     var utm : Utm,
 
     @Campo(
         descripcion = "Coordenada inicio de obra X",
-        posición = 1,
+        posición = 6,
         sección = "General"
     )
     var coorInX : String,
 
     @Campo(
         descripcion = "Coordenada inicio de obra Y",
-        posición = 2,
+        posición = 8,
         sección = "General"
     )
     var coorInY : String,
 
     @Campo(
         descripcion = "Coordenada fin de obra X",
-        posición = 3,
+        posición = 10,
         sección = "General"
     )
     var coorFnX : String,
 
     @Campo(
         descripcion = "Coordenada fin de obra Y",
-        posición = 4,
+        posición = 12,
         sección = "General"
     )
     var coorFnY : String,
 
     @Campo(
         descripcion = "Estado de conservación",
-        posición = 5,
+        posición = 14,
         sección = "General"
     )
     var estadoConservacion: EstadoConservacion,
 
     @Campo(
         descripcion = "Ubicación de la obra",
-        posición = 6,
+        posición = 16,
         sección = "General"
     )
     var ubicacionObra: UbicacionObra,
 
     @Campo(
         descripcion = "Margen donde se sitúa la obra",
-        posición = 7,
+        posición = 18,
         sección = "General"
     )
     var margen: Margen,
 
     @Campo(
         descripcion = "Tipo de obra",
-        posición = 8,
+        posición = 20,
         sección = "TipoObra"
     )
     var tipoObra: TipoObra,
 
     @Campo(
         descripcion = "Observaciones",
-        posición = 9,
+        posición = 22,
         sección = "TipoObra"
     )
     var tipoObraObservaciones : String,
 
     @Campo(
         descripcion = "Función de la obra",
-        posición =10,
+        posición =24,
         sección = "TipoObra"
     )
     var funcionObra: FuncionObra,
 
     @Campo(
         descripcion = "Cauce",
-        posición =11,
+        posición =26,
         sección = "TipoObra"
     )
     var cauce: Cauce,
 
     @Campo(
         descripcion = "Material principal",
-        posición = 12,
+        posición = 28,
         sección = "TipoObra"
     )
     var materialPrincipal: MaterialPrincipal,
 
     @Campo(
         descripcion = "Revestimiento",
-        posición = 13,
+        posición = 30,
         sección = "TipoObra"
     )
     var revestimiento: Revestimiento,
 
     @Campo(
         descripcion = "Ancho en coronación en metros (AC)",
-        posición =16,
+        posición =32,
         sección = "Dimensiones"
     )
     var anchoCoronacion: AnchoCoronacion,
 
     @Campo(
         descripcion = "Altura interior (Talud cauce) en metros (Hi)",
-        posición = 17,
+        posición = 34,
         sección = "Dimensiones"
     )
     var alturaInterior : String,
 
     @Campo(
         descripcion = "Altura exterior en metros (He)",
-        posición = 18,
+        posición = 36,
         sección = "Dimensiones"
     )
     var alturaExterior : String,
 
     @Campo(
         descripcion = "Longitud talud interior en metros (talud cauce) (Li)",
-        posición = 19,
+        posición = 38,
         sección = "Dimensiones",
     )
     var taludInterior : String,
 
     @Campo(
         descripcion = "Longitud del talud exterior en metros (Le)",
-        posición = 20,
+        posición = 40,
         sección = "Dimensiones"
     )
     var taludExterior : String,
 
     @Campo(
         descripcion = "Distancia media al cauce activo en metros (Dc)",
-        posición = 21,
+        posición = 42,
         sección = "Dimensiones"
     )
     var distanciaMediaCauce : String,
 
     @Campo(
         descripcion = "Otros",
-        posición = 22,
+        posición = 44,
         sección = "Dimensiones"
     )
     var otros : String,
 
     @Campo(
         descripcion = "Observaciones Generales",
-        posición = 23,
+        posición = 46,
         sección = "ObservacionesF"
     )
     var observacionesGenerales : String,
